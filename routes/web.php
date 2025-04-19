@@ -11,6 +11,13 @@ Route::get('/', function () {
     return view('landing');
 })->name('home');
 
+Route::get('/guidebook', function () {
+    return redirect(asset('files/YFLI Handbook - Langkat Binjai 2025.pdf'));
+})->name('guidebook');
+Route::get('/poster', function () {
+    return view('poster');
+});
+
 Route::get('/auth/google', [UserController::class, 'redirectToGoogle'])->name('auth.google.redirect');
 Route::get('/auth/google/callback', [UserController::class, 'handleGoogleCallback']);
 
@@ -18,10 +25,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('dashboard', [CandidateController::class, 'dashboard'])->name('candidate.dashboard');
     Route::get('detail/{candidate}', [CandidateController::class, 'detail'])->name('candidate.detail');
-
-    Route::get('/poster', function () {
-        return view('poster');
-    });
 
     Route::prefix('notifications')->group(function () {
         Route::get('/read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.read');
