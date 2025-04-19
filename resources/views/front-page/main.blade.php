@@ -1,24 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Future Leaders ID</title>
-  <meta name="description" content="">
-  <meta name="keywords" content="">
 
-  <meta name="robots" content="noindex, nofollow">
+  <!-- Meta Title & Description -->
+  <title>Langkat-Binjai Future Leaders 2025</title>
+  <meta name="description"
+    content="Langkat-Binjai Future Leaders adalah program pengembangan calon pemimpin muda Langkat dan Binjai bertaraf global, dengan pengalaman pelatihan di Kuala Lumpur, Malaysia.">
+  <meta name="keywords"
+    content="Langkat, Binjai, Future Leaders, Program Kepemimpinan, Pemuda, Global Leadership, Malaysia, Kuala Lumpur, YLFI, Pelatihan Anak Muda, Program Gratis, Sosial Project, Bootcamp">
+
+  <!-- SEO & Social Sharing -->
+  <meta name="author" content="Future Leaders Indonesia">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Langkat-Binjai Future Leaders 2025">
+  <meta property="og:description"
+    content="Program gratis untuk mencetak pemimpin muda Langkat & Binjai yang siap tampil di kancah global.">
+  <meta property="og:image" content="{{ asset('assets/fli/og-lbfl.jpg') }}">
+  <meta property="og:url" content="https://futureleaders.id/lbfl">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Langkat-Binjai Future Leaders 2025">
+  <meta name="twitter:description"
+    content="Ikuti program kepemimpinan pemuda berskala global dengan international camp ke Kuala Lumpur.">
+  {{-- <meta name="twitter:image" content="{{ asset('assets/fli/og-lbfl.jpg') }}"> --}}
 
   <!-- Favicons -->
-  <link href="{{ asset('assets/fli/favicon.png') }}" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link rel="icon" href="{{ asset('assets/fli/favicon.png') }}" type="image/png">
+  {{-- <link rel="apple-touch-icon" href="{{ asset('assets/fli/favicon.png') }}"> --}}
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
   <!-- Vendor CSS Files -->
