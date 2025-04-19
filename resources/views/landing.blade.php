@@ -53,7 +53,7 @@
         </div>
         <div class="text-center" data-aos="zoom-out" data-aos-delay="100">
           <div class="d-flex justify-content-center align-items-center gap-2">
-            <a href="{{ asset('files/Handbook - Langkat Future Leaders 2025.pdf') }}" class="btn-outline-primary"
+            <a href="{{ asset('files/Handbook - Langkat-Binjai Future Leaders 2025.pdf') }}" class="btn-outline-primary"
               download>Unduh Panduan</a>
             <a href="{{ route('candidate.dashboard') }}" class="btn-get-started">Daftar Sekarang</a>
           </div>
@@ -201,7 +201,7 @@
 
             <div class="text-center" data-aos="zoom-out" data-aos-delay="100">
               <div class="d-flex justify-content-center align-items-center gap-2">
-                <a href="{{ asset('files/Handbook - Langkat Future Leaders 2025.pdf') }}" class="btn-outline-primary"
+                <a href="{{ asset('files/Handbook - Langkat-Binjai Future Leaders 2025.pdf') }}" class="btn-outline-primary"
                   download>Unduh Panduan</a>
                 <a href="{{ route('candidate.dashboard') }}" class="btn-get-started">Daftar Sekarang</a>
               </div>
