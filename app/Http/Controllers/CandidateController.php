@@ -188,8 +188,8 @@ class CandidateController extends Controller
 
         try {
             $number = '628990980799';
-            $candidateUrl = url('/candidate/detail' . $candidate);
-            $message = ("Halo Admin, ada Pendaftar baru dengan nama '{$candidate->user->name}'.\Lihat detailnya di: {$candidateUrl}");
+            $candidateUrl = url('/candidate/detail' . $candidate->id);
+            $message = ("Halo Admin, ada Pendaftar baru dengan nama '{$candidate->user->name}'.\n\nLihat detailnya di: {$candidateUrl}");
 
             app(WhatsappController::class)->sendNotification($message, $number);
         } catch (\Exception $e) {
