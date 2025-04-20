@@ -111,14 +111,14 @@
 
     <div class="col-md-4 mb-2">
       <label class="form-label">Ukuran Kaos</label>
-      <input type="text" class="form-control" name="tshirt_size" placeholder="Kota Kelahiran"
+      <input type="text" class="form-control" name="tshirt_size" placeholder="S, M, L, XL, XXL"
         value="{{ old('tshirt_size', $candidate->tshirt_size ?? '') }}" required>
     </div>
 
 
     <div class="col-md-4 mb-2">
       <label class="form-label">Ukuran Jacket</label>
-      <input type="text" class="form-control" name="jacket_size" placeholder="Kota Kelahiran"
+      <input type="text" class="form-control" name="jacket_size" placeholder="S, M, L, XL, XXL"
         value="{{ old('jacket_size', $candidate->jacket_size ?? '') }}" required>
     </div>
 
