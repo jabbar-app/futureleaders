@@ -106,7 +106,7 @@
                 <input type="number" name="educations[\${index}][end_year]" class="form-control">
               </div>
               <div class="col-md-3">
-                <label class="form-label">IPK</label>
+                <label class="form-label">IPK (Nilai Akhir)</label>
                 <input type="text" name="educations[\${index}][gpa]" class="form-control">
               </div>
               <div class="col-md-12">
