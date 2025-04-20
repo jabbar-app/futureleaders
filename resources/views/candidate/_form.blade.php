@@ -89,6 +89,14 @@
     </div>
 
     <div class="col-md-6 mb-2">
+      <label class="form-label">Keahlian</label>
+      <textarea class="form-control" name="skills" rows="2" placeholder="Tulis keahlian kamu di sini jika ada."
+        required>
+        {{ old('skills', $candidate->skills ?? '') }}
+    </textarea>
+    </div>
+
+    <div class="col-md-4 mb-2">
       <label class="form-label">Jenis Kelamin</label>
       <select class="form-select" name="gender" required>
         <option value="" disabled selected>- Pilih Data -</option>
@@ -114,7 +122,6 @@
       <input type="text" class="form-control" name="tshirt_size" placeholder="S, M, L, XL, XXL"
         value="{{ old('tshirt_size', $candidate->tshirt_size ?? '') }}" required>
     </div>
-
 
     <div class="col-md-4 mb-2">
       <label class="form-label">Ukuran Jacket</label>
