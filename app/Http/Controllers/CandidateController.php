@@ -25,6 +25,8 @@ class CandidateController extends Controller
 
         $incompleteFields = $this->getIncompleteFields($candidate);
 
+        // dd($incompleteFields);
+
         return view('candidate.dashboard', [
             'candidate' => $candidate,
             'incomplete' => count($incompleteFields) > 0,
@@ -58,7 +60,6 @@ class CandidateController extends Controller
             'tshirt_size',
             'jacket_size',
             'address',
-            'skills',
             'illness',
             'allergies',
             'instagram',

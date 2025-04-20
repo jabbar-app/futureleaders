@@ -166,11 +166,11 @@
 
     @php
       $incomeOptions = [
-          'not_defined' => 'Tidak berpenghasilan',
-          'below_3m' => 'Di bawah 3jt',
-          '3m_5m' => '3jt - 5jt',
-          '5m_10m' => '5jt - 10jt',
-          'above_10m' => 'Di atas 10jt',
+          'Tidak berpenghasilan' => 'Tidak berpenghasilan',
+          'Di bawah 3jt' => 'Di bawah 3jt',
+          '3jt - 5jt' => '3jt - 5jt',
+          '5jt - 10jt' => '5jt - 10jt',
+          'Di atas 10jt' => 'Di atas 10jt',
       ];
     @endphp
 

@@ -75,6 +75,12 @@
               <dd class="col-sm-8">{{ $candidate->jacket_size }}</dd>
             </dl>
 
+            <h5 class="mb-3 text-primary">Keahlian</h5>
+            <dl class="row">
+              <dt class="col-sm-4">Keahlian/Keterampilan:</dt>
+              <dd class="col-sm-8">{{ $candidate->skills }}</dd>
+            </dl>
+
             <hr class="my-4">
 
             <h5 class="mb-3 text-primary">Data Orang Tua</h5>

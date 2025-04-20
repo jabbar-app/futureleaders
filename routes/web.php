@@ -25,7 +25,7 @@ Route::get('/auth/google/callback', [UserController::class, 'handleGoogleCallbac
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('dashboard', [CandidateController::class, 'dashboard'])->name('candidate.dashboard');
-    Route::get('detail/{candidate}', [CandidateController::class, 'detail'])->name('candidate.detail');
+    Route::get('candidate/detail/{candidate}', [CandidateController::class, 'detail'])->name('candidate.detail');
 
     Route::prefix('notifications')->group(function () {
         Route::get('/read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.read');

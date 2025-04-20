@@ -10,7 +10,9 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        $candidates = Candidate::where('is_admin', false)->select(['id', 'name', 'phone', 'email', 'status'])->get();
+        $candidates = Candidate::with('user')
+            ->select(['id', 'user_id', 'region', 'gender', 'birth_date'])
+            ->get();
         return view('admin.dashboard', compact('candidates'));
     }
 }
