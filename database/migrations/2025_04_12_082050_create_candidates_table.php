@@ -22,7 +22,7 @@ return new class extends Migration
             $table->date('birth_date')->nullable();
             $table->string('birth_place')->nullable();
             $table->text('address')->nullable();
-            $table->string('skills')->nullable();
+            $table->text('skills')->default('');
             $table->string('instagram')->nullable();
             $table->string('religion')->nullable();
             $table->text('illness')->nullable();
