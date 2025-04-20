@@ -6,6 +6,7 @@ use App\Models\Candidate;
 use App\Models\SelectionPhase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class CandidateController extends Controller
@@ -182,7 +183,17 @@ class CandidateController extends Controller
 
         $validated['user_id'] = Auth::id();
 
-        Candidate::create($validated);
+        $candidate = Candidate::create($validated);
+
+        try {
+            $number = '628990980799';
+            $candidateUrl = url('/candidate/detail' . $candidate);
+            $message = ("Halo Admin, ada Pendaftar baru dengan nama '{$candidate->user->name}'.\Lihat detailnya di: {$candidateUrl}");
+
+            app(WhatsappController::class)->sendNotification($message, $number);
+        } catch (\Exception $e) {
+            Log::error('WhatsApp notification failed: ' . $e->getMessage());
+        }
 
         return redirect()->route('candidate.dashboard')->with('success', 'Profil kandidat berhasil disimpan.');
     }

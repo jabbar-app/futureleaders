@@ -43,7 +43,7 @@
       @php
         $hasMotivation = $candidate->motivation !== null;
       @endphp
-      <div class="col-md-3 col-sm-6">
+      <div class="col-md-3 col-sm-6 mb-2">
         <div class="card {{ $hasMotivation ? 'card-border-shadow-info' : 'card-border-shadow-warning' }} h-100">
           <div class="card-body">
             <h5>Motivasi & Rencana</h5>
@@ -69,7 +69,7 @@
       @php
         $hasEducation = $candidate->educations->isNotEmpty();
       @endphp
-      <div class="col-md-3 col-sm-6">
+      <div class="col-md-3 col-sm-6 mb-2">
         <div class="card {{ $hasEducation ? 'card-border-shadow-info' : 'card-border-shadow-warning' }} h-100">
           <div class="card-body">
             <h5>Data Pendidikan</h5>
@@ -95,7 +95,7 @@
       @php
         $hasAchievement = $candidate->achievements->isNotEmpty();
       @endphp
-      <div class="col-md-3 col-sm-6">
+      <div class="col-md-3 col-sm-6 mb-2">
         <div class="card {{ $hasAchievement ? 'card-border-shadow-info' : 'card-border-shadow-warning' }} h-100">
           <div class="card-body">
             <h5>Data Prestasi</h5>
@@ -121,7 +121,7 @@
       @php
         $hasOrganization = $candidate->organizations->isNotEmpty();
       @endphp
-      <div class="col-md-3 col-sm-6">
+      <div class="col-md-3 col-sm-6 mb-2">
         <div class="card {{ $hasOrganization ? 'card-border-shadow-info' : 'card-border-shadow-warning' }} h-100">
           <div class="card-body">
             <h5>Pengalaman Organisasi</h5>
