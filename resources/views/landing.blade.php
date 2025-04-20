@@ -25,7 +25,7 @@
   <main class="main">
     <!-- Hero Section -->
     <section id="hero" class="hero section">
-      <img src="assets/img/hero-bg-abstract.jpg" alt="" data-aos="fade-in">
+      <img src="{{ asset('assets/img/hero-bg-abstract.jpg') }}" alt="" data-aos="fade-in">
       <div class="container">
         <div class="row justify-content-center" data-aos="zoom-out">
           <div class="col-xl-7 col-lg-9 text-center">

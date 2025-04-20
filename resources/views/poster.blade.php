@@ -62,7 +62,6 @@
             ✅ Cultural Exchange di Malaysia<br>
             ✅ Sertifikat + Alumni Network Nasional<br><br>
 
-            Selengkapnya kamu bisa baca Panduan Pendaftarannya di: https://futureleaders.id/guidebook/ <br><br>
             <strong>*FULLY FUNDED*</strong> – Seluruh biaya ditanggung oleh YFLI<br>
             📅 *International Camp:* 16–18 Agustus 2025 <br>
             📍 *Lokasi:* Kuala Lumpur, Malaysia <br><br>
@@ -72,7 +71,9 @@
             - Memiliki KTP Langkat atau Binjai <br>
             - Berkomitmen mengikuti seluruh tahapan <br><br>
 
-            🚀 *Daftar sekarang:* https://futureleaders.id/register/<br><br>
+            🚀 *Daftar sekarang:* https://futureleaders.id/<br><br>
+
+            Selengkapnya kamu bisa baca Panduan Pendaftarannya di: https://futureleaders.id/guidebook/ <br><br>
             #LangkatFutureLeaders #FutureLeadersIndonesia #GoGlobal
           </p>
         </div>
