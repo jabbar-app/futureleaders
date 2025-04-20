@@ -38,7 +38,7 @@
       </div>
     </div>
 
-    {{-- <div class="row mt-4 g-6">
+    <div class="row mt-4 g-6">
       <!-- Card Border Shadow -->
       <div class="col-lg-3 col-sm-6">
         <div class="card card-border-shadow-primary h-100">
@@ -112,6 +112,6 @@
           </div>
         </div>
       </div>
-    </div> --}}
+    </div>
   </div>
 @endsection

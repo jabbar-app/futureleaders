@@ -23,6 +23,7 @@ class CandidateController extends Controller
         }
 
         $incompleteFields = $this->getIncompleteFields($candidate);
+        dd($incompleteFields);
 
         return view('candidate.dashboard', [
             'candidate' => $candidate,

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('candidates', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('avatar')->nullable();
             $table->enum('region', ['Langkat', 'Binjai'])->nullable();
             $table->string('identity_number')->nullable();
             $table->string('phone')->nullable();
@@ -23,7 +24,10 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->string('instagram')->nullable();
             $table->string('religion')->nullable();
-            $table->string('avatar')->nullable();
+            $table->text('illness')->nullable();
+            $table->text('allergies')->nullable();
+            $table->string('tshirt_size')->nullable();
+            $table->string('jacket_size')->nullable();
             $table->string('father_name')->nullable();
             $table->enum('father_status', ['Masih Hidup', 'Sudah Meninggal'])->nullable();
             $table->string('father_occupation')->nullable();

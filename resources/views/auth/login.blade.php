@@ -24,8 +24,7 @@
           <h3 class="mb-1">Welcome, Future Leaders! 👋</h3>
           <p class="mb-4">Gunakan akun Google kamu untuk login ke dashboard.</p>
 
-
-          {{-- @if ($errors->any())
+          @if ($errors->any())
             <div class="alert alert-danger">
               {{ $errors->first() }}
             </div>
@@ -66,7 +65,7 @@
             <a href="{{ route('register') }}">
               <span>Buat di sini</span>
             </a>
-          </p> --}}
+          </p>
 
           {{-- <div class="divider my-4">
             <div class="divider-text">atau gunakan</div>
