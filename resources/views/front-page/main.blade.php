@@ -10,7 +10,7 @@
   <meta name="description"
     content="Langkat-Binjai Future Leaders adalah program pengembangan calon pemimpin muda Langkat dan Binjai bertaraf global, dengan pengalaman pelatihan di Kuala Lumpur, Malaysia.">
   <meta name="keywords"
-    content="Langkat, Binjai, Future Leaders, Program Kepemimpinan, Pemuda, Global Leadership, Malaysia, Kuala Lumpur, YLFI, Pelatihan Anak Muda, Program Gratis, Sosial Project, Bootcamp">
+    content="Langkat, Binjai, Future Leaders, Program Kepemimpinan, Pemuda, Global Leadership, Malaysia, Kuala Lumpur, YFLI, Pelatihan Anak Muda, Program Gratis, Sosial Project, Bootcamp">
 
   <!-- SEO & Social Sharing -->
   <meta name="author" content="Future Leaders Indonesia">

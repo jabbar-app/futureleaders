@@ -224,7 +224,7 @@
             <h3>Apakah program ini gratis?</h3>
             <div class="faq-content">
               <p>Ya! Seluruh rangkaian program mulai dari pendaftaran, pelatihan, hingga keberangkatan ke luar negeri
-                difasilitasi penuh oleh YLFI.</p>
+                difasilitasi penuh oleh YFLI.</p>
             </div>
             <i class="faq-toggle bi bi-chevron-right"></i>
           </div>
@@ -331,7 +331,7 @@
           <a href="https://futureleaders.id" class="logo d-flex align-items-center">
             <img src="{{ asset('assets/fli/fli-logo.svg') }}">
           </a>
-          <p>Program Langkat-Binjai Future Leaders diselenggarakan oleh YLFI dan bertujuan mencetak pemimpin muda yang
+          <p>Program Langkat-Binjai Future Leaders diselenggarakan oleh YFLI dan bertujuan mencetak pemimpin muda yang
             berdaya saing global dan berdampak sosial di tahun 2045.</p>
           <div class="social-links d-flex mt-4">
             <a href="#"><i class="bi bi-instagram"></i></a>

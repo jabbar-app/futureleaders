@@ -63,7 +63,7 @@
             ✅ Sertifikat + Alumni Network Nasional<br><br>
 
             Selengkapnya kamu bisa baca Panduan Pendaftarannya di: https://futureleaders.id/guidebook/ <br><br>
-            <strong>*FULLY FUNDED*</strong> – Seluruh biaya ditanggung oleh YLFI<br>
+            <strong>*FULLY FUNDED*</strong> – Seluruh biaya ditanggung oleh YFLI<br>
             📅 *International Camp:* 16–18 Agustus 2025 <br>
             📍 *Lokasi:* Kuala Lumpur, Malaysia <br><br>
 
