@@ -206,7 +206,9 @@
     </div>
 
     <div class="col-12">
-      <label class="form-label">Bukti Screenshot Share Info ke 3 Grup WhatsApp</label>
+      <label class="form-label">Bukti Screenshot Share Info ke 3 Grup WhatsApp. <br>
+        Klik untuk unduh <a href="/poster" class="fw-bold">Poster dan Caption</a>
+      </label>
       @php
         $proofs = isset($candidate) && $candidate->proof ? json_decode($candidate->proof, true) : [];
       @endphp
