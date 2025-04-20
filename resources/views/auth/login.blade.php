@@ -19,7 +19,7 @@
       <div class="d-flex col-12 col-lg-5 align-items-center p-sm-5 p-4">
         <div class="w-px-400 mx-auto">
           <!-- Logo -->
-          <img src="{{ asset('assets/fli/fli-logo.svg') }}" alt="Gencar" height="36" class="mb-4">
+          <img src="{{ asset('assets/fli/fli-logo.svg') }}" alt="YFLI" height="36" class="mb-4">
           <!-- /Logo -->
           <h3 class="mb-1">Welcome, Future Leaders! 👋</h3>
           <p class="mb-4">Gunakan akun Google kamu untuk login ke dashboard.</p>

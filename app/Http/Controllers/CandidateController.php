@@ -34,6 +34,8 @@ class CandidateController extends Controller
 
     public function detail(Candidate $candidate)
     {
+        // return redirect()->route('candidate.dashboard');
+
         $incompleteFields = $this->getIncompleteFields($candidate);
 
         return view('candidate.detail', [
@@ -52,6 +54,8 @@ class CandidateController extends Controller
             'gender',
             'birth_date',
             'birth_place',
+            'tshirt_size',
+            'jacket_size',
             'address',
             'illness',
             'allergies',
@@ -102,6 +106,8 @@ class CandidateController extends Controller
             'gender' => 'required|string|in:Laki-laki,Perempuan',
             'birth_date' => 'required|date',
             'birth_place' => 'required|string',
+            'tshirt_size' => 'required|string',
+            'jacket_size' => 'required|string',
             'address' => 'required|string',
             'illness' => 'required|string',
             'allergies' => 'required|string',
@@ -204,6 +210,8 @@ class CandidateController extends Controller
             'gender' => 'required|string|in:Laki-laki,Perempuan',
             'birth_date' => 'required|date',
             'birth_place' => 'required|string',
+            'tshirt_size' => 'required|string',
+            'jacket_size' => 'required|string',
             'address' => 'required|string',
             'illness' => 'required|string',
             'allergies' => 'required|string',

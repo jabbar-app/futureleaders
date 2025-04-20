@@ -110,6 +110,19 @@
     </div>
 
     <div class="col-md-4 mb-2">
+      <label class="form-label">Ukuran Kaos</label>
+      <input type="text" class="form-control" name="tshirt_size" placeholder="Kota Kelahiran"
+        value="{{ old('tshirt_size', $candidate->tshirt_size ?? '') }}" required>
+    </div>
+
+
+    <div class="col-md-4 mb-2">
+      <label class="form-label">Ukuran Jacket</label>
+      <input type="text" class="form-control" name="jacket_size" placeholder="Kota Kelahiran"
+        value="{{ old('jacket_size', $candidate->jacket_size ?? '') }}" required>
+    </div>
+
+    <div class="col-md-4 mb-2">
       <label class="form-label">Agama</label>
       <select class="form-select" name="religion" required>
         <option value="" disabled selected>- Pilih Data -</option>
