@@ -8,7 +8,7 @@
           document.write(new Date().getFullYear());
         </script>
         {{-- dibuat dengan ❤️ oleh --}}
-        <a href="#" target="_blank" class="footer-link text-danger fw-medium">Future Leaders ID</a>
+        <a href="#" target="_blank" class="footer-link text-primary fw-medium">Future Leaders ID</a>
          {{-- | FIM Medan & FIM Deli Serdang --}}
       </div>
       {{-- <div class="d-none d-lg-inline-block">

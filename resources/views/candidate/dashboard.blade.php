@@ -39,76 +39,106 @@
     </div>
 
     <div class="row mt-4 g-6">
-      <!-- Card Border Shadow -->
-      <div class="col-lg-3 col-sm-6">
-        <div class="card card-border-shadow-primary h-100">
+      {{-- Motivasi --}}
+      @php
+        $hasMotivation = $candidate->motivation !== null;
+      @endphp
+      <div class="col-md-3 col-sm-6">
+        <div class="card {{ $hasMotivation ? 'card-border-shadow-info' : 'card-border-shadow-warning' }} h-100">
           <div class="card-body">
+            <h5>Motivasi & Rencana</h5>
             <div class="d-flex align-items-center mb-2">
-              <div class="avatar me-4">
-                <span class="avatar-initial rounded bg-label-primary"><i
-                    class="icon-base ti tabler-truck icon-28px"></i></span>
+              <div class="avatar me-2">
+                <span class="avatar-initial rounded {{ $hasMotivation ? 'bg-label-info' : 'bg-label-warning' }}">
+                  <i class="icon-base ti {{ $hasMotivation ? 'ti-circle-check' : 'ti-alert-triangle' }}"></i>
+                </span>
               </div>
-              <h4 class="mb-0">42</h4>
+              <h6 class="m-0 text-{{ $hasMotivation ? 'info' : 'warning' }}">
+                {{ $hasMotivation ? 'Sudah mengisi.' : 'Belum mengisi.' }}
+              </h6>
             </div>
-            <p class="mb-1">On route vehicles</p>
-            <p class="mb-0">
-              <span class="text-heading fw-medium me-2">+18.2%</span>
-              <small class="text-body-secondary">than last week</small>
-            </p>
+            <a href="{{ $hasMotivation ? route('candidate.motivation.edit', $candidate) : route('candidate.motivation.create', $candidate) }}"
+              class="btn btn-outline-{{ $hasMotivation ? 'info' : 'warning' }} mt-2">
+              {{ $hasMotivation ? 'Lihat Data' : 'Tambah Data' }}
+            </a>
           </div>
         </div>
       </div>
-      <div class="col-lg-3 col-sm-6">
-        <div class="card card-border-shadow-warning h-100">
+
+      {{-- Pendidikan --}}
+      @php
+        $hasEducation = $candidate->educations->isNotEmpty();
+      @endphp
+      <div class="col-md-3 col-sm-6">
+        <div class="card {{ $hasEducation ? 'card-border-shadow-info' : 'card-border-shadow-warning' }} h-100">
           <div class="card-body">
+            <h5>Data Pendidikan</h5>
             <div class="d-flex align-items-center mb-2">
-              <div class="avatar me-4">
-                <span class="avatar-initial rounded bg-label-warning"><i
-                    class="icon-base ti tabler-alert-triangle icon-28px"></i></span>
+              <div class="avatar me-2">
+                <span class="avatar-initial rounded {{ $hasEducation ? 'bg-label-info' : 'bg-label-warning' }}">
+                  <i class="icon-base ti {{ $hasEducation ? 'ti-circle-check' : 'ti-alert-triangle' }}"></i>
+                </span>
               </div>
-              <h4 class="mb-0">8</h4>
+              <h6 class="m-0 text-{{ $hasEducation ? 'info' : 'warning' }}">
+                {{ $hasEducation ? 'Sudah mengisi.' : 'Belum mengisi.' }}
+              </h6>
             </div>
-            <p class="mb-1">Vehicles with errors</p>
-            <p class="mb-0">
-              <span class="text-heading fw-medium me-2">-8.7%</span>
-              <small class="text-body-secondary">than last week</small>
-            </p>
+            <a href="{{ $hasEducation ? route('candidate.education.edit', $candidate) : route('candidate.education.create', $candidate) }}"
+              class="btn btn-outline-{{ $hasEducation ? 'info' : 'warning' }} mt-2">
+              {{ $hasEducation ? 'Lihat Data' : 'Tambah Data' }}
+            </a>
           </div>
         </div>
       </div>
-      <div class="col-lg-3 col-sm-6">
-        <div class="card card-border-shadow-danger h-100">
+
+      {{-- Prestasi --}}
+      @php
+        $hasAchievement = $candidate->achievements->isNotEmpty();
+      @endphp
+      <div class="col-md-3 col-sm-6">
+        <div class="card {{ $hasAchievement ? 'card-border-shadow-info' : 'card-border-shadow-warning' }} h-100">
           <div class="card-body">
+            <h5>Data Prestasi</h5>
             <div class="d-flex align-items-center mb-2">
-              <div class="avatar me-4">
-                <span class="avatar-initial rounded bg-label-danger"><i
-                    class="icon-base ti tabler-git-fork icon-28px"></i></span>
+              <div class="avatar me-2">
+                <span class="avatar-initial rounded {{ $hasAchievement ? 'bg-label-info' : 'bg-label-warning' }}">
+                  <i class="icon-base ti {{ $hasAchievement ? 'ti-circle-check' : 'ti-alert-triangle' }}"></i>
+                </span>
               </div>
-              <h4 class="mb-0">27</h4>
+              <h6 class="m-0 text-{{ $hasAchievement ? 'info' : 'warning' }}">
+                {{ $hasAchievement ? 'Sudah mengisi.' : 'Belum mengisi.' }}
+              </h6>
             </div>
-            <p class="mb-1">Deviated from route</p>
-            <p class="mb-0">
-              <span class="text-heading fw-medium me-2">+4.3%</span>
-              <small class="text-body-secondary">than last week</small>
-            </p>
+            <a href="{{ $hasAchievement ? route('candidate.achievement.edit', $candidate) : route('candidate.achievement.create', $candidate) }}"
+              class="btn btn-outline-{{ $hasAchievement ? 'info' : 'warning' }} mt-2">
+              {{ $hasAchievement ? 'Lihat Data' : 'Tambah Data' }}
+            </a>
           </div>
         </div>
       </div>
-      <div class="col-lg-3 col-sm-6">
-        <div class="card card-border-shadow-info h-100">
+
+      {{-- Organisasi --}}
+      @php
+        $hasOrganization = $candidate->organizations->isNotEmpty();
+      @endphp
+      <div class="col-md-3 col-sm-6">
+        <div class="card {{ $hasOrganization ? 'card-border-shadow-info' : 'card-border-shadow-warning' }} h-100">
           <div class="card-body">
+            <h5>Pengalaman Organisasi</h5>
             <div class="d-flex align-items-center mb-2">
-              <div class="avatar me-4">
-                <span class="avatar-initial rounded bg-label-info"><i
-                    class="icon-base ti tabler-clock icon-28px"></i></span>
+              <div class="avatar me-2">
+                <span class="avatar-initial rounded {{ $hasOrganization ? 'bg-label-info' : 'bg-label-warning' }}">
+                  <i class="icon-base ti {{ $hasOrganization ? 'ti-circle-check' : 'ti-alert-triangle' }}"></i>
+                </span>
               </div>
-              <h4 class="mb-0">13</h4>
+              <h6 class="m-0 text-{{ $hasOrganization ? 'info' : 'warning' }}">
+                {{ $hasOrganization ? 'Sudah mengisi.' : 'Belum mengisi.' }}
+              </h6>
             </div>
-            <p class="mb-1">Late vehicles</p>
-            <p class="mb-0">
-              <span class="text-heading fw-medium me-2">-2.5%</span>
-              <small class="text-body-secondary">than last week</small>
-            </p>
+            <a href="{{ $hasOrganization ? route('candidate.organization.edit', $candidate) : route('candidate.organization.create', $candidate) }}"
+              class="btn btn-outline-{{ $hasOrganization ? 'info' : 'warning' }} mt-2">
+              {{ $hasOrganization ? 'Lihat Data' : 'Tambah Data' }}
+            </a>
           </div>
         </div>
       </div>

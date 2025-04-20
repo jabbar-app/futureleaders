@@ -50,8 +50,6 @@
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/typeahead-js/typeahead.css') }}" />
-  <link rel="stylesheet" href="{{ asset('assets/vendor/libs/tagify/tagify.css') }}" />
-  <link rel="stylesheet" href="{{ asset('assets/vendor/libs/@form-validation/form-validation.css') }}" />
 
   <!-- Page CSS -->
 
@@ -123,17 +121,26 @@
   <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
   <script src="{{ asset('assets/vendor/libs/bootstrap-select/bootstrap-select.js') }}"></script>
   <script src="{{ asset('assets/vendor/libs/flatpickr/flatpickr.js') }}"></script>
-  <script src="{{ asset('assets/vendor/libs/tagify/tagify.js') }}"></script>
-  <script src="{{ asset('assets/vendor/libs/@form-validation/popular.js') }}"></script>
-  <script src="{{ asset('assets/vendor/libs/@form-validation/bootstrap5.js') }}"></script>
-  <script src="{{ asset('assets/vendor/libs/@form-validation/auto-focus.js') }}"></script>
   <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
 
   <script src="{{ asset('assets/js/main.js') }}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.querySelector('form');
+      if (!form) return;
+
+      form.addEventListener('submit', function(e) {
+        if (!form.checkValidity()) {
+          e.preventDefault(); // Cegah submit
+          setTimeout(() => form.reportValidity(), 10); // Tampilkan native error message
+          return false;
+        }
+      });
+    });
+  </script>
 
   <script src="{{ asset('assets/js/app-academy-dashboard.js') }}"></script>
   <script src="{{ asset('assets/js/extended-ui-sweetalert2.js') }}"></script>
-  <script src="{{ asset('assets/js/form-validation.js') }}"></script>
 
   @stack('scripts')
 </body>

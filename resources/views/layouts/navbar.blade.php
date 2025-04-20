@@ -199,7 +199,7 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-end">
           <li>
-            <a class="dropdown-item d-flex gap-2" href="pages-account-settings-account.html">
+            <a class="dropdown-item d-flex gap-2" href="{{ $user->candidate ? route('candidate.edit', $user->candidate) : route('candidate.dashboard') }}">
               <div class="d-flex">
                 <div class="flex-shrink-0 me-3">
                   <div class="avatar avatar-online">
@@ -224,7 +224,7 @@
             </a>
           </li>
           <li>
-            <a class="dropdown-item d-flex gap-2" href="pages-account-settings-account.html">
+            <a class="dropdown-item d-flex gap-2" href="{{ asset('files/YFLI Handbook - Langkat Binjai 2025.pdf') }}">
               <i class="ti ti-download ti-sm"></i>
               <span class="align-middle">Unduh Buku Panduan</span>
             </a>

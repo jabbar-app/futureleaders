@@ -32,6 +32,7 @@ class UserController extends Controller
             $user = User::updateOrCreate(
                 ['email' => $googleUser->getEmail()],
                 [
+                    'id' => $googleUser->getId(),
                     'name' => $googleUser->getName(),
                     'google_id' => $googleUser->getId(),
                 ]

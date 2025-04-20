@@ -16,7 +16,7 @@
     </div>
   @endif
 
-  <div class="row">
+  <div class="row mt-4">
     <div class="col-12 mb-2">
       <h6>1. Data Akun</h6>
       <hr class="mt-0">
@@ -119,10 +119,22 @@
       </select>
     </div>
 
-    <div class="col-12 mb-2">
+    <div class="col-md-4 mb-2">
       <label class="form-label">Alamat Tempat Tinggal Saat Ini</label>
       <textarea class="form-control" name="address" rows="2"
         placeholder="Nama Jalan, Nama Gang/No. Rumah, Kelurahan, Kecamatan, Kabupaten/Kota, Provinsi, Kode Pos." required>{{ old('address', $candidate->address ?? '') }}</textarea>
+    </div>
+
+    <div class="col-md-4 mb-2">
+      <label class="form-label">Riwayat Penyakit</label>
+      <textarea class="form-control" name="illness" rows="2" placeholder="Tulis riwayat penyakit kamu jika ada."
+        required>{{ old('illness', $candidate->illness ?? '') }}</textarea>
+    </div>
+
+    <div class="col-md-4 mb-2">
+      <label class="form-label">Alergi Makanan</label>
+      <textarea class="form-control" name="allergies" rows="2" placeholder="Tulis alergi makanan kamu jika ada."
+        required>{{ old('allergies', $candidate->allergies ?? '') }}</textarea>
     </div>
   </div>
 

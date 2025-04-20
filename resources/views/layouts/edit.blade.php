@@ -4,14 +4,10 @@
   <div class="container-xxl flex-grow-1 container-p-y">
     @include('components.session-message')
     <div class="card">
-      <h5 class="card-header">Pendaftaran Peserta YFLI 2025</h5>
+      <h5 class="card-header">Data Pendaftaran Peserta YFLI 2025</h5>
       <hr class="m-0">
       <div class="card-body">
-        @include('candidate._form', [
-            'action' => route('candidate.store'),
-            'method' => 'POST',
-            'submitLabel' => 'Submit Pendaftaran',
-        ])
+        @yield('form')
       </div>
     </div>
   </div>

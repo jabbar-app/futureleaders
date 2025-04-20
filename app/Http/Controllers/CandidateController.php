@@ -23,7 +23,6 @@ class CandidateController extends Controller
         }
 
         $incompleteFields = $this->getIncompleteFields($candidate);
-        // dd($incompleteFields);
 
         return view('candidate.dashboard', [
             'candidate' => $candidate,
@@ -54,6 +53,8 @@ class CandidateController extends Controller
             'birth_date',
             'birth_place',
             'address',
+            'illness',
+            'allergies',
             'instagram',
             'religion',
             'avatar',
@@ -97,27 +98,26 @@ class CandidateController extends Controller
             'phone' => 'required|string',
             'instagram' => 'required|string',
             'region' => 'required|string',
+            'religion' => 'required|string',
             'gender' => 'required|string|in:Laki-laki,Perempuan',
             'birth_date' => 'required|date',
             'birth_place' => 'required|string',
             'address' => 'required|string',
+            'illness' => 'required|string',
+            'allergies' => 'required|string',
             'avatar' => 'required|string',
-
             'father_name' => 'nullable|string',
             'father_status' => 'nullable|in:Masih Hidup,Sudah Meninggal',
             'father_occupation' => 'nullable|string',
             'father_income' => 'nullable|string',
-
             'mother_name' => 'nullable|string',
             'mother_status' => 'nullable|in:Masih Hidup,Sudah Meninggal',
             'mother_occupation' => 'nullable|string',
             'mother_income' => 'nullable|string',
-
             'guardian_name' => 'nullable|string',
             'guardian_phone' => 'nullable|string',
             'guardian_relationship' => 'nullable|string',
             'siblings_count' => 'nullable|integer',
-
             'proof' => 'required|array|max:3',
             'proof.*' => 'image|mimes:jpg,jpeg,png|max:2048',
             'file_ktp' => 'required|image|mimes:jpg,jpeg,png|max:2048',
@@ -205,23 +205,21 @@ class CandidateController extends Controller
             'birth_date' => 'required|date',
             'birth_place' => 'required|string',
             'address' => 'required|string',
+            'illness' => 'required|string',
+            'allergies' => 'required|string',
             'avatar' => 'nullable|string',
-
             'father_name' => 'nullable|string',
             'father_status' => 'nullable|string',
             'father_occupation' => 'nullable|string',
             'father_income' => 'nullable|string',
-
             'mother_name' => 'nullable|string',
             'mother_status' => 'nullable|string',
             'mother_occupation' => 'nullable|string',
             'mother_income' => 'nullable|string',
-
             'guardian_name' => 'nullable|string',
             'guardian_phone' => 'nullable|string',
             'guardian_relationship' => 'nullable|string',
             'siblings_count' => 'nullable|integer',
-
             'proof' => 'nullable|array|max:3',
             'proof.*' => 'image|mimes:jpg,jpeg,png|max:2048',
             'file_ktp' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -309,5 +307,101 @@ class CandidateController extends Controller
     {
         $candidate->delete();
         return redirect()->route('candidate.index')->with('success', 'Candidate deleted.');
+    }
+
+    public function education_create(Candidate $candidate)
+    {
+        return view('candidate.education.create', compact('candidate'));
+    }
+
+    public function education_store(Request $request, Candidate $candidate)
+    {
+        $request->validate([
+            'educations.*.institution_name' => 'required|string',
+            'educations.*.level' => 'nullable|string',
+            'educations.*.major' => 'nullable|string',
+            'educations.*.start_year' => 'nullable|integer',
+            'educations.*.end_year' => 'nullable|integer',
+            'educations.*.gpa' => 'nullable|string',
+            'educations.*.activities' => 'nullable|string',
+        ]);
+
+        $candidate->educations()->delete();
+        foreach ($request->educations as $edu) {
+            $candidate->educations()->create($edu);
+        }
+
+        return redirect()->route('candidate.dashboard')->with('success', 'Data pendidikan berhasil disimpan.');
+    }
+
+    public function education_edit(Candidate $candidate)
+    {
+        return view('candidate.education.edit', compact('candidate'));
+    }
+
+    public function education_update(Request $request, Candidate $candidate)
+    {
+        $request->validate([
+            'educations.*.institution_name' => 'required|string',
+            'educations.*.level' => 'nullable|string',
+            'educations.*.major' => 'nullable|string',
+            'educations.*.start_year' => 'nullable|integer',
+            'educations.*.end_year' => 'nullable|integer',
+            'educations.*.gpa' => 'nullable|string',
+            'educations.*.activities' => 'nullable|string',
+        ]);
+
+        $candidate->educations()->delete();
+        foreach ($request->educations as $edu) {
+            $candidate->educations()->create($edu);
+        }
+
+        return redirect()->route('candidate.dashboard')->with('success', 'Data pendidikan berhasil diperbarui.');
+    }
+
+    public function organization_create(Candidate $candidate)
+    {
+        return view('candidate.organization.create', compact('candidate'));
+    }
+
+    public function organization_store(Request $request, Candidate $candidate)
+    {
+        $validated = $request->validate([
+            'organizations.*.organization_name' => 'required|string',
+            'organizations.*.position' => 'nullable|string',
+            'organizations.*.year' => 'nullable|string',
+            'organizations.*.description' => 'nullable|string',
+        ]);
+
+        $candidate->organizations()->delete();
+
+        foreach ($request->organizations as $org) {
+            $candidate->organizations()->create($org);
+        }
+
+        return redirect()->route('candidate.dashboard')->with('success', 'Data organisasi berhasil disimpan.');
+    }
+
+    public function organization_edit(Candidate $candidate)
+    {
+        return view('candidate.organization.edit', compact('candidate'));
+    }
+
+    public function organization_update(Request $request, Candidate $candidate)
+    {
+        $validated = $request->validate([
+            'organizations.*.organization_name' => 'required|string',
+            'organizations.*.position' => 'nullable|string',
+            'organizations.*.year' => 'nullable|string',
+            'organizations.*.description' => 'nullable|string',
+        ]);
+
+        $candidate->organizations()->delete();
+
+        foreach ($request->organizations as $org) {
+            $candidate->organizations()->create($org);
+        }
+
+        return redirect()->route('candidate.dashboard')->with('success', 'Data organisasi berhasil diperbarui.');
     }
 }

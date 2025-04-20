@@ -11,16 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('candidate_educations', function (Blueprint $table) {
+        Schema::create('candidate_motivations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('candidate_id')->constrained('candidates')->onDelete('cascade');
-            $table->string('institution_name');
-            $table->string('level')->nullable();    // contoh: 'SMA', 'S1', dsb.
-            $table->string('major')->nullable();
-            $table->integer('start_year')->nullable();
-            $table->integer('end_year')->nullable();
-            $table->string('gpa')->nullable();
-            $table->text('activities')->nullable();
+            $table->text('motivation');
+            $table->text('project_plan');
             $table->timestamps();
         });
     }
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('candidate_education');
+        Schema::dropIfExists('candidate_motivations');
     }
 };
