@@ -6,35 +6,45 @@ use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
 
     public function redirectToGoogle()
     {
-        // Redirect ke Google untuk login
         return Socialite::driver('google')->redirect();
     }
 
     public function handleGoogleCallback()
     {
         try {
-            // Ambil data dari Google
-            $googleUser = Socialite::driver('google')->user();
+            Log::info('🔁 Mulai handleGoogleCallback');
 
-            // Cari user atau buat baru
-            $user = User::updateOrCreate([
-                'email' => $googleUser->getEmail(),
-            ], [
+            $googleUser = Socialite::driver('google')->user();
+            Log::info('✅ Data dari Google', [
+                'id' => $googleUser->getId(),
                 'name' => $googleUser->getName(),
-                'google_id' => $googleUser->getId(),
+                'email' => $googleUser->getEmail(),
                 'avatar' => $googleUser->getAvatar(),
             ]);
 
-            Auth::login($user);
+            $user = User::updateOrCreate(
+                ['email' => $googleUser->getEmail()],
+                [
+                    'name' => $googleUser->getName(),
+                    'google_id' => $googleUser->getId(),
+                ]
+            );
 
-            return redirect()->intended('/dashboard'); // redirect sesuai kebutuhan
+            Log::info('✅ User berhasil ditemukan atau dibuat', ['user_id' => $user->id]);
+
+            Auth::login($user);
+            Log::info('✅ User berhasil login', ['user_id' => $user->id]);
+
+            return redirect()->intended('/dashboard');
         } catch (\Exception $e) {
+            Log::error('❌ Gagal login Google', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             return redirect('/login')->with('error', 'Gagal login Google');
         }
     }
