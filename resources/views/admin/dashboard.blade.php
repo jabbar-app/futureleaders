@@ -122,7 +122,7 @@
                           <i class="ti ti-dots"></i>
                         </button>
                         <div class="dropdown-menu">
-                          <a href="{{ route('candidate.show', $candidate) }}" class="dropdown-item waves-effect">
+                          <a href="{{ route('candidate.detail', $candidate) }}" class="dropdown-item waves-effect">
                             <i class="ti ti-file-dots ti-sm me-1"></i> View
                           </a>
                           <a href="{{ route('candidate.edit', $candidate) }}" class="dropdown-item waves-effect">
