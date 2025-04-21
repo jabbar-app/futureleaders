@@ -39,7 +39,7 @@ class CandidateController extends Controller
     {
         $candidate->load([
             'user',
-            'motivations',
+            'motivation',
             'educations',
             'achievements',
             'organizations',
