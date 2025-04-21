@@ -28,13 +28,18 @@ class AdminController extends Controller
             ->where('is_admin', false)
             ->where('status', 'active')
             ->whereNotNull('email_verified_at')
+            ->with([
+                'candidate.motivation',
+                'candidate.educations',
+                'candidate.achievements',
+                'candidate.organizations'
+            ])
             ->get()
             ->filter(function ($user) {
-                $candidate = $user->candidate()
-                    ->with(['motivation', 'educations', 'achievements', 'organizations'])
-                    ->first();
+                $candidate = $user->candidate;
 
-                return !$candidate->motivation ||
+                return !$candidate ||
+                    !$candidate->motivation ||
                     $candidate->educations->isEmpty() ||
                     $candidate->achievements->isEmpty() ||
                     $candidate->organizations->isEmpty();
