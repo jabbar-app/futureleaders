@@ -14,13 +14,36 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        $candidates = Candidate::with('user')
-            ->select(['id', 'user_id', 'region', 'gender', 'birth_date'])
+        $candidates = Candidate::with('user')->select(['id', 'user_id', 'region', 'gender', 'birth_date'])->get();
+
+        $userIdsWithCandidate = Candidate::pluck('user_id')->toArray();
+
+        $usersWithoutCandidate = User::whereNotIn('id', $userIdsWithCandidate)
+            ->where('is_admin', false)
+            ->where('status', 'active')
+            ->whereNotNull('email_verified_at')
             ->get();
 
+        $usersWithIncompleteCandidate = User::whereIn('id', $userIdsWithCandidate)
+            ->where('is_admin', false)
+            ->where('status', 'active')
+            ->whereNotNull('email_verified_at')
+            ->get()
+            ->filter(function ($user) {
+                $candidate = $user->candidate()
+                    ->with(['motivation', 'educations', 'achievements', 'organizations'])
+                    ->first();
+
+                return !$candidate->motivation ||
+                    $candidate->educations->isEmpty() ||
+                    $candidate->achievements->isEmpty() ||
+                    $candidate->organizations->isEmpty();
+            });
+
+        $reminderCount = $usersWithoutCandidate->count() + $usersWithIncompleteCandidate->count();
         $phases = SelectionPhase::orderBy('start_date')->get();
 
-        return view('admin.dashboard', compact('candidates', 'phases'));
+        return view('admin.dashboard', compact('candidates', 'reminderCount', 'phases'));
     }
 
     public function updatePhaseDeadline(Request $request)

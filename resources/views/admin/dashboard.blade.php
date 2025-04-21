@@ -74,22 +74,26 @@
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="col-md-3">
-            <div class="card mb-4">
-              <div class="card-body d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 text-danger">Reminder Pendaftaran</h5>
-                <div id="sendingStatus" class="text-muted mt-2" style="display: none;">
-                  ⏳ Sedang mengirim email ke seluruh user yang belum melengkapi pendaftaran...
-                </div>
-                <form action="{{ route('admin.send-reminders') }}" method="POST" id="reminderForm">
-                  @csrf
-                  <button type="submit" class="btn btn-outline-danger" id="sendReminderBtn">
-                    <i class="ti ti-mail"></i> Kirim Email Reminder
-                  </button>
-                </form>
-              </div>
+
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0 text-danger">Reminder Pendaftaran</h5>
+              <small class="text-muted">Total user yang akan dikirimi email: <strong>{{ $reminderCount }}</strong></small>
             </div>
+
+            <div id="sendingStatus" class="text-muted mt-3" style="display: none;">
+              ⏳ Sedang mengirim email ke <span id="currentCount">0</span> / {{ $reminderCount }}...
+            </div>
+
+            <form action="{{ route('admin.send-reminders') }}" method="POST" id="reminderForm">
+              @csrf
+              <button type="submit" class="btn btn-outline-danger mt-3" id="sendReminderBtn">
+                <i class="ti ti-mail"></i> Kirim Email Reminder
+              </button>
+            </form>
           </div>
         </div>
 
@@ -218,34 +222,47 @@
     </div>
   </div>
 @endsection
-
 @push('scripts')
   <script>
-    $(document).ready(function() {
-      // Ambil nomor halaman terakhir yang tersimpan
+    document.addEventListener('DOMContentLoaded', function() {
+      // === Inisialisasi DataTable dengan penyimpanan halaman terakhir ===
       const lastPage = localStorage.getItem('candidates_table_last_page') || 0;
-
       const table = $('#candidatesTable').DataTable({
-        // Konfigurasi lainnya
-        displayStart: lastPage * 10 // asumsikan 10 rows per page
+        displayStart: lastPage * 10 // asumsikan 10 rows per halaman
       });
 
-      // Setiap kali candidate pindah halaman, simpan ke localStorage
       table.on('page.dt', function() {
         const info = table.page.info();
         localStorage.setItem('candidates_table_last_page', info.page);
       });
-    });
 
+      // === Reminder Email Simulation ===
+      const reminderForm = document.getElementById('reminderForm');
+      const sendBtn = document.getElementById('sendReminderBtn');
+      const statusText = document.getElementById('sendingStatus');
+      const currentCount = document.getElementById('currentCount');
+      const total = {{ $reminderCount }};
 
-    const reminderForm = document.getElementById('reminderForm');
-    const sendBtn = document.getElementById('sendReminderBtn');
-    const statusText = document.getElementById('sendingStatus');
+      if (reminderForm && sendBtn && statusText) {
+        reminderForm.addEventListener('submit', function() {
+          sendBtn.disabled = true;
+          sendBtn.innerText = 'Mengirim...';
+          statusText.style.display = 'block';
 
-    reminderForm?.addEventListener('submit', function() {
-      sendBtn.disabled = true;
-      sendBtn.innerText = 'Mengirim...';
-      statusText.style.display = 'block';
+          if (currentCount && total > 0) {
+            let sent = 0;
+            const interval = setInterval(() => {
+              sent++;
+              currentCount.innerText = sent;
+
+              if (sent >= total) {
+                clearInterval(interval);
+                sendBtn.innerText = 'Terkirim';
+              }
+            }, 300);
+          }
+        });
+      }
     });
   </script>
 @endpush
