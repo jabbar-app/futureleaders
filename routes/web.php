@@ -19,6 +19,8 @@ Route::get('/poster', function () {
     return view('poster');
 });
 
+Route::post('/admin/send-reminder-emails', [AdminController::class, 'sendReminderEmails'])->name('admin.send-reminders');
+
 Route::get('/auth/google', [UserController::class, 'redirectToGoogle'])->name('auth.google.redirect');
 Route::get('/auth/google/callback', [UserController::class, 'handleGoogleCallback']);
 

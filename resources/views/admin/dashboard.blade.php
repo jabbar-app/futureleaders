@@ -6,7 +6,7 @@
     <div class="row">
       <div class="col-12 col-xl-12 col-sm-12 order-1 order-lg-2 mb-4 mb-lg-0">
         <div class="row mb-4">
-          <div class="col-md-6 mb-2">
+          <div class="col-md-3 mb-2">
             <div class="card h-auto">
               <div class="card-body d-flex justify-content-between align-items-center">
                 <div class="card-title mb-0">
@@ -71,6 +71,23 @@
                     </svg>
                   </span>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="card mb-4">
+              <div class="card-body d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 text-danger">Reminder Pendaftaran</h5>
+                <div id="sendingStatus" class="text-muted mt-2" style="display: none;">
+                  ⏳ Sedang mengirim email ke seluruh user yang belum melengkapi pendaftaran...
+                </div>
+                <form action="{{ route('admin.send-reminders') }}" method="POST" id="reminderForm">
+                  @csrf
+                  <button type="submit" class="btn btn-outline-danger" id="sendReminderBtn">
+                    <i class="ti ti-mail"></i> Kirim Email Reminder
+                  </button>
+                </form>
               </div>
             </div>
           </div>
@@ -218,6 +235,17 @@
         const info = table.page.info();
         localStorage.setItem('candidates_table_last_page', info.page);
       });
+    });
+
+
+    const reminderForm = document.getElementById('reminderForm');
+    const sendBtn = document.getElementById('sendReminderBtn');
+    const statusText = document.getElementById('sendingStatus');
+
+    reminderForm?.addEventListener('submit', function() {
+      sendBtn.disabled = true;
+      sendBtn.innerText = 'Mengirim...';
+      statusText.style.display = 'block';
     });
   </script>
 @endpush
