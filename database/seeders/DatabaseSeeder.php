@@ -15,8 +15,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         User::factory()->create([
             'name' => 'Jabbar A. Panggabean',
             'email' => 'jabbarpanggabean@gmail.com',
@@ -32,6 +30,8 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('bism!LLAH99'),
             'is_admin' => true,
         ]);
+
+        // User::factory(10)->create();
 
         $phases = [
             [

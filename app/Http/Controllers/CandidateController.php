@@ -111,6 +111,11 @@ class CandidateController extends Controller
 
     public function store(Request $request)
     {
+        $existingCandidate = Candidate::where('user_id', Auth::id())->first();
+        if ($existingCandidate) {
+            return redirect()->route('candidate.dashboard');
+        }
+
         $validated = $request->validate([
             'identity_number' => 'required|string',
             'phone' => 'required|string',
