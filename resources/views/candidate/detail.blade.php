@@ -158,17 +158,17 @@
             <hr class="my-4">
 
             <h5 class="mb-3 text-primary">Motivasi & Rencana Proyek</h5>
-            @forelse ($candidate->motivations as $motivation)
+            @if ($candidate->motivation)
               <dl class="row">
                 <dt class="col-sm-4">Motivasi:</dt>
-                <dd class="col-sm-8">{{ $motivation->motivation }}</dd>
+                <dd class="col-sm-8">{{ $candidate->motivation->motivation }}</dd>
 
                 <dt class="col-sm-4">Rencana Proyek:</dt>
-                <dd class="col-sm-8">{{ $motivation->project_plan }}</dd>
+                <dd class="col-sm-8">{{ $candidate->motivation->project_plan }}</dd>
               </dl>
-            @empty
+            @else
               <p class="text-muted">Belum ada data motivasi.</p>
-            @endforelse
+            @endif
 
             <hr class="my-4">
 
