@@ -22,8 +22,6 @@ class AdminController extends Controller
 
         // Load all active & verified users (non-admin)
         $allUsers = User::where('is_admin', false)
-            ->where('status', 'active')
-            ->whereNotNull('email_verified_at')
             ->get();
 
         // Users who have not submitted candidate data
