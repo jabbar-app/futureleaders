@@ -37,7 +37,13 @@ class CandidateController extends Controller
 
     public function detail(Candidate $candidate)
     {
-        // return redirect()->route('candidate.dashboard');
+        $candidate->load([
+            'user',
+            'motivations',
+            'educations',
+            'achievements',
+            'organizations',
+        ]);
 
         $incompleteFields = $this->getIncompleteFields($candidate);
 
@@ -188,7 +194,7 @@ class CandidateController extends Controller
 
         try {
             $number = '628990980799';
-            $candidateUrl = url('/candidate/detail' . $candidate->id);
+            $candidateUrl = url('/candidate/detail/' . $candidate->id);
             $message = ("Halo Admin, ada Pendaftar baru dengan nama '{$candidate->user->name}'.\n\nLihat detailnya di: {$candidateUrl}");
 
             app(WhatsappController::class)->sendNotification($message, $number);
@@ -202,6 +208,14 @@ class CandidateController extends Controller
 
     public function show(Candidate $candidate)
     {
+        $candidate->load([
+            'user',
+            'motivations',
+            'educations',
+            'achievements',
+            'organizations',
+        ]);
+
         return view('candidate.show', ['candidate' => $candidate]);
     }
 

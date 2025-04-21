@@ -154,6 +154,97 @@
                 </dd>
               @endif
             </dl>
+
+            <hr class="my-4">
+
+            <h5 class="mb-3 text-primary">Motivasi & Rencana Proyek</h5>
+            @forelse ($candidate->motivations as $motivation)
+              <dl class="row">
+                <dt class="col-sm-4">Motivasi:</dt>
+                <dd class="col-sm-8">{{ $motivation->motivation }}</dd>
+
+                <dt class="col-sm-4">Rencana Proyek:</dt>
+                <dd class="col-sm-8">{{ $motivation->project_plan }}</dd>
+              </dl>
+            @empty
+              <p class="text-muted">Belum ada data motivasi.</p>
+            @endforelse
+
+            <hr class="my-4">
+
+            <h5 class="mb-3 text-primary">Riwayat Pendidikan</h5>
+            @forelse ($candidate->educations as $edu)
+              <dl class="row">
+                <dt class="col-sm-4">Institusi:</dt>
+                <dd class="col-sm-8">{{ $edu->institution_name }}</dd>
+
+                <dt class="col-sm-4">Jenjang & Jurusan:</dt>
+                <dd class="col-sm-8">{{ $edu->level }} - {{ $edu->major }}</dd>
+
+                <dt class="col-sm-4">Tahun Masuk - Lulus:</dt>
+                <dd class="col-sm-8">{{ $edu->start_year }} - {{ $edu->end_year }}</dd>
+
+                <dt class="col-sm-4">IPK/Nilai:</dt>
+                <dd class="col-sm-8">{{ $edu->gpa }}</dd>
+
+                <dt class="col-sm-4">Aktivitas/Kegiatan:</dt>
+                <dd class="col-sm-8">{{ $edu->activities }}</dd>
+              </dl>
+              @if (!$loop->last)
+                <hr>
+              @endif
+            @empty
+              <p class="text-muted">Belum ada riwayat pendidikan.</p>
+            @endforelse
+
+            <hr class="my-4">
+
+            <h5 class="mb-3 text-primary">Pengalaman Organisasi</h5>
+            @forelse ($candidate->organizations as $org)
+              <dl class="row">
+                <dt class="col-sm-4">Nama Organisasi:</dt>
+                <dd class="col-sm-8">{{ $org->organization_name }}</dd>
+
+                <dt class="col-sm-4">Posisi:</dt>
+                <dd class="col-sm-8">{{ $org->position }}</dd>
+
+                <dt class="col-sm-4">Tahun:</dt>
+                <dd class="col-sm-8">{{ $org->year }}</dd>
+
+                <dt class="col-sm-4">Deskripsi:</dt>
+                <dd class="col-sm-8">{{ $org->description }}</dd>
+              </dl>
+              @if (!$loop->last)
+                <hr>
+              @endif
+            @empty
+              <p class="text-muted">Belum ada pengalaman organisasi.</p>
+            @endforelse
+
+            <hr class="my-4">
+
+            <h5 class="mb-3 text-primary">Prestasi & Penghargaan</h5>
+            @forelse ($candidate->achievements as $ach)
+              <dl class="row">
+                <dt class="col-sm-4">Judul Prestasi:</dt>
+                <dd class="col-sm-8">{{ $ach->title }}</dd>
+
+                <dt class="col-sm-4">Tahun:</dt>
+                <dd class="col-sm-8">{{ $ach->year }}</dd>
+
+                <dt class="col-sm-4">Diberikan Oleh:</dt>
+                <dd class="col-sm-8">{{ $ach->issuer }}</dd>
+
+                <dt class="col-sm-4">Deskripsi:</dt>
+                <dd class="col-sm-8">{{ $ach->description }}</dd>
+              </dl>
+              @if (!$loop->last)
+                <hr>
+              @endif
+            @empty
+              <p class="text-muted">Belum ada data prestasi.</p>
+            @endforelse
+
           </div>
         </div>
       </div>
