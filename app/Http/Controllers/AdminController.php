@@ -14,28 +14,18 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        // Load all candidates with user relationship
         $candidates = Candidate::with('user')->select(['id', 'user_id', 'region', 'gender', 'birth_date'])->get();
 
-        // Get all candidate user_ids
         $userIdsWithCandidate = Candidate::pluck('user_id')->toArray();
 
-        // Load all active & verified users (non-admin)
-        $allUsers = User::where('is_admin', false)
-            ->get();
-
-        // Users who have not submitted candidate data
         $usersWithoutCandidate = User::whereNotIn('id', $userIdsWithCandidate)
             ->where('is_admin', false)
             ->where('status', 'active')
-            ->whereNotNull('email_verified_at')
             ->get();
 
-        // Users who have submitted candidate but data still incomplete
         $usersWithIncompleteCandidate = User::whereIn('id', $userIdsWithCandidate)
             ->where('is_admin', false)
             ->where('status', 'active')
-            ->whereNotNull('email_verified_at')
             ->with([
                 'candidate.motivation',
                 'candidate.educations',
@@ -53,30 +43,11 @@ class AdminController extends Controller
                     $candidate->organizations->isEmpty();
             });
 
-        // Total reminder target count
         $reminderCount = $usersWithoutCandidate->count() + $usersWithIncompleteCandidate->count();
-
-        // Load all phases
         $phases = SelectionPhase::orderBy('start_date')->get();
-
-        // 🔍 Debug: Show all groups (can be removed after testing)
-        dd([
-            'all_users' => $allUsers->pluck('email'),
-            'users_without_candidate' => $usersWithoutCandidate->pluck('email'),
-            'users_with_incomplete_candidate' => $usersWithIncompleteCandidate->map(function ($user) {
-                return [
-                    'email' => $user->email,
-                    'motivation' => $user->candidate?->motivation ? '✅' : '❌',
-                    'educations' => $user->candidate?->educations->count(),
-                    'achievements' => $user->candidate?->achievements->count(),
-                    'organizations' => $user->candidate?->organizations->count(),
-                ];
-            }),
-        ]);
 
         return view('admin.dashboard', compact('candidates', 'reminderCount', 'phases'));
     }
-
 
     public function updatePhaseDeadline(Request $request)
     {
@@ -103,7 +74,6 @@ class AdminController extends Controller
         $usersWithoutCandidate = User::whereNotIn('id', $userIdsWithCandidate)
             ->where('is_admin', false)
             ->where('status', 'active')
-            ->whereNotNull('email_verified_at')
             ->get();
 
         foreach ($usersWithoutCandidate as $user) {
@@ -115,7 +85,6 @@ class AdminController extends Controller
         $usersWithIncompleteCandidate = User::whereIn('id', $userIdsWithCandidate)
             ->where('is_admin', false)
             ->where('status', 'active')
-            ->whereNotNull('email_verified_at')
             ->get();
 
         foreach ($usersWithIncompleteCandidate as $user) {
