@@ -29,6 +29,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     });
 
+    Route::prefix('notifications')->group(function () {
+        Route::get('/read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+        Route::get('/delete/{id}', [NotificationController::class, 'delete'])->name('notifications.delete');
+        Route::get('/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
+        Route::get('/all', [NotificationController::class, 'index'])->name('notifications.all');
+    });
+
     Route::get('dashboard', [CandidateController::class, 'dashboard'])->name('candidate.dashboard');
 
     Route::middleware(EnsureCandidateIsOwnerOrAdmin::class)->group(function () {
