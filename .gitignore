@@ -9,6 +9,7 @@
 /public/proofs
 /storage/*.key
 /storage/pail
+/resources/views/auth
 /vendor
 .env
 .env.backup
