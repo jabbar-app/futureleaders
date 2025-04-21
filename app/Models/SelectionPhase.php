@@ -39,4 +39,9 @@ class SelectionPhase extends Model
     {
         return $this->hasMany(CandidateScore::class, 'selection_phase_id');
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true)->orderByDesc('end_date');
+    }
 }

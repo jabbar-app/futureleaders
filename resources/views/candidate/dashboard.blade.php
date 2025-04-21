@@ -15,24 +15,49 @@
           </div>
           <div class="card-body">
             <hr class="mt-0">
-            @if ($incomplete)
-              <div class="alert alert-warning mb-0 alert-dismissible" role="alert">
-                <h5 class="alert-heading mb-2">Pendaftaran Hampir Berhasil!</h5>
-                <p class="mb-0">
-                  Silakan lengkapi data pendaftaran kamu yang masih kurang melalui <a
-                    href="{{ route('candidate.edit', $candidate) }}" class="fw-bold text-primary">tautan ini</a> ya.
-                </p>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <x-countdown-alert :end-date="$endDate" />
+
+            @php
+              $hasMotivation = $candidate->motivation !== null;
+              $hasEducation = $candidate->educations->isNotEmpty();
+              $hasAchievement = $candidate->achievements->isNotEmpty();
+              $hasOrganization = $candidate->organizations->isNotEmpty();
+              $allFilled = $hasMotivation && $hasEducation && $hasAchievement && $hasOrganization;
+            @endphp
+
+            <div id="registration-alert">
+              <div id="registration-closed-info" class="d-none">
+                <div class="fl-alert mb-0 alert-dismissible" role="alert">
+                  <h5 class="alert-heading mb-2">Pendaftaran Telah Ditutup</h5>
+                  <p class="mb-0">
+                    Terima kasih atas partisipasimu! Pendaftaran telah resmi ditutup. <br>
+                    Silakan menunggu pengumuman dan informasi selanjutnya yang akan disampaikan melalui WhatsApp dan email
+                    resmi kami.
+                  </p>
+                </div>
               </div>
-            @else
-              <div class="alert alert-success mb-0 alert-dismissible" role="alert">
-                <h5 class="alert-heading mb-2">Pendaftaran Berhasil!</h5>
-                <p class="mb-0">
-                  Silakan menunggu Pengumuman & Informasi selanjutnya.
-                </p>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            @endif
+
+              @if (!$allFilled)
+                <div class="fl-alert mb-0 alert-dismissible" role="alert">
+                  <h5 class="alert-heading mb-2">Lengkapi Data Pendaftaranmu</h5>
+                  <p class="mb-0">
+                    Terima kasih telah memulai proses pendaftaran. Yuk, pastikan seluruh data kamu sudah lengkap,
+                    termasuk: <strong>Motivasi, Pendidikan, Prestasi, dan Organisasi</strong>. Data lengkap akan menjadi
+                    bahan penilaian penting bagi tim seleksi.
+                  </p>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              @else
+                <div class="alert alert-success mb-0 alert-dismissible" role="alert">
+                  <h5 class="alert-heading mb-2">Pendaftaran Selesai dan Valid!</h5>
+                  <p class="mb-0">
+                    Selamat! Kamu telah berhasil melengkapi seluruh data yang dibutuhkan. Silakan menunggu pengumuman dan
+                    informasi selanjutnya melalui WhatsApp dan email.
+                  </p>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              @endif
+            </div>
           </div>
         </div>
       </div>
@@ -145,3 +170,31 @@
     </div>
   </div>
 @endsection
+
+@push('scripts')
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const isClosed = window.isRegistrationClosed || false;
+
+      if (isClosed) {
+        const closedInfo = document.getElementById('registration-closed-info');
+        const allAlerts = document.querySelectorAll('#registration-alert .alert, #registration-alert .fl-alert');
+
+        allAlerts.forEach(alert => {
+          if (!closedInfo.contains(alert)) {
+            alert.classList.add('d-none');
+          }
+        });
+
+        closedInfo?.classList.remove('d-none');
+
+        document.querySelectorAll('.btn-outline-warning, .btn-outline-info')
+          .forEach(btn => {
+            btn.classList.add('disabled');
+            btn.innerText = 'Pengisian Ditutup';
+            btn.removeAttribute('href');
+          });
+      }
+    });
+  </script>
+@endpush

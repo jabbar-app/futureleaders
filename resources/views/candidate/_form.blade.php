@@ -90,10 +90,7 @@
 
     <div class="col-md-6 mb-2">
       <label class="form-label">Keahlian</label>
-      <textarea class="form-control" name="skills" rows="2" placeholder="Tulis keahlian kamu di sini jika ada."
-        required>
-        {{ old('skills', $candidate->skills ?? '') }}
-    </textarea>
+      <textarea class="form-control" name="skills" rows="2" placeholder="Tuliskan keahlian kamu jika ada." required>{{ old('skills', $candidate->skills ?? '') }}</textarea>
     </div>
 
     <div class="col-md-4 mb-2">
@@ -238,12 +235,37 @@
     </div>
 
     <div class="col-12">
-      <label class="form-label">Bukti Screenshot Share Info ke 3 Grup WhatsApp. <br>
-        Klik untuk unduh <a href="/poster" class="fw-bold">Poster dan Caption</a>
+      {{-- Alert informasi grup WhatsApp --}}
+      <div class="fl-alert">
+        <div style="font-weight: 600; font-size: 1rem; margin-bottom: 0.5rem;">
+          ⚠️ Perhatian!
+        </div>
+        <p style="margin-bottom: 0.5rem;">
+          Pastikan kamu membagikan informasi ini ke <u>grup WhatsApp yang benar-benar relevan</u> — seperti grup
+          sekolah, organisasi, komunitas, atau alumni.
+        </p>
+        <p style="margin-bottom: 0.5rem;">
+          Mohon <strong>tidak mengirim ke grup pribadi</strong> yang hanya berisi dirimu sendiri atau keluarga inti.
+        </p>
+        <p style="margin-bottom: 0.5rem;">
+          Kami melakukan pengecekan dan <span style="color: #dc3545; font-weight: 600;">bukti share yang tidak valid
+            tidak akan dihitung</span>.
+          Aksi ini menjadi bagian dari <strong>penilaian tambahan</strong> terkait semangat kontribusi dan kemampuan
+          menyebarkan dampak positif.
+        </p>
+        <p style="margin-bottom: 0;">
+          Klik untuk unduh <a href="/poster" target="_blank" style="font-weight: bold; color: #0d6efd;">Poster dan Caption</a>
+        </p>
+      </div>
+
+      <label class="form-label">
+        Bukti Screenshot Share Info ke 3 Grup WhatsApp. (Kamu bisa pilih sampai 3 File Screenshot)
       </label>
+
       @php
         $proofs = isset($candidate) && $candidate->proof ? json_decode($candidate->proof, true) : [];
       @endphp
+
       <input type="file" class="form-control" id="inputProof" name="proof[]" accept="image/*" multiple
         @if (count($proofs) == 0) required @endif>
 

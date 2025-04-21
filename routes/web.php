@@ -24,6 +24,8 @@ Route::get('/auth/google/callback', [UserController::class, 'handleGoogleCallbac
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::put('/admin/selection-phases/update-deadline', [AdminController::class, 'updatePhaseDeadline'])->name('admin.selection-phases.update-deadline');
+
     Route::get('dashboard', [CandidateController::class, 'dashboard'])->name('candidate.dashboard');
     Route::get('candidate/detail/{candidate}', [CandidateController::class, 'detail'])->name('candidate.detail');
 

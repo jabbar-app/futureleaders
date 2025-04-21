@@ -13,7 +13,7 @@ class CandidateController extends Controller
 {
     public function dashboard()
     {
-        $candidate = Candidate::with(['educations', 'achievements', 'scores.selectionPhase'])
+        $candidate = Candidate::with(['educations', 'achievements', 'organizations', 'motivation', 'scores.selectionPhase'])
             ->where('user_id', Auth::id())
             ->first();
 
@@ -25,13 +25,18 @@ class CandidateController extends Controller
 
         $incompleteFields = $this->getIncompleteFields($candidate);
 
-        // dd($incompleteFields);
+        // Ambil fase seleksi aktif (opsional: bisa ditambah filter where is_active = true)
+        $activePhase = SelectionPhase::where('is_active', true)
+            ->whereNotNull('end_date')
+            ->orderByDesc('end_date')
+            ->first();
 
         return view('candidate.dashboard', [
             'candidate' => $candidate,
             'incomplete' => count($incompleteFields) > 0,
             'selectionPhases' => SelectionPhase::orderBy('start_date')->get(),
             'candidateScores' => $candidate->scores ?? collect(),
+            'endDate' => $activePhase?->end_date,
         ]);
     }
 
@@ -221,6 +226,12 @@ class CandidateController extends Controller
 
     public function edit(Candidate $candidate)
     {
+        $activePhase = SelectionPhase::where('is_active', true)->first();
+
+        if ($activePhase && now()->greaterThan($activePhase->end_date)) {
+            return redirect()->route('candidate.dashboard')->with('warning', 'Maaf, waktu pengisian sudah ditutup.');
+        }
+
         // dd($candidate);
         return view('candidate.edit', ['candidate' => $candidate]);
     }
