@@ -161,10 +161,10 @@
             @if ($candidate->motivation)
               <dl class="row">
                 <dt class="col-sm-4">Motivasi:</dt>
-                <dd class="col-sm-8">{{ $candidate->motivation->motivation }}</dd>
+                <dd class="col-sm-8">{!! $candidate->motivation->motivation !!}</dd>
 
                 <dt class="col-sm-4">Rencana Proyek:</dt>
-                <dd class="col-sm-8">{{ $candidate->motivation->project_plan }}</dd>
+                <dd class="col-sm-8">{!! $candidate->motivation->project_plan !!}</dd>
               </dl>
             @else
               <p class="text-muted">Belum ada data motivasi.</p>
