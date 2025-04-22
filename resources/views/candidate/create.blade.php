@@ -12,6 +12,7 @@
             'action' => route('candidate.store'),
             'method' => 'POST',
             'submitLabel' => 'Submit Pendaftaran',
+            'candidate' => $candidate ?? null,
         ])
       </div>
     </div>

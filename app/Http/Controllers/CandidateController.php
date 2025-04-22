@@ -7,7 +7,6 @@ use App\Models\SelectionPhase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Inertia\Inertia;
 
 class CandidateController extends Controller
 {
@@ -156,7 +155,7 @@ class CandidateController extends Controller
             }
         }
 
-        // Simpan avatar
+        // Simpan avatar (base64)
         if ($request->filled('avatar')) {
             $imageData = $request->avatar;
             $imageName = time() . '-' . uniqid() . '.jpg';
@@ -167,33 +166,52 @@ class CandidateController extends Controller
             }
 
             $imageDecoded = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
-            file_put_contents($folderPath . '/' . $imageName, $imageDecoded);
-            $validated['avatar'] = 'avatars/' . $imageName;
+            $imageResource = imagecreatefromstring($imageDecoded);
+
+            if ($imageResource !== false) {
+                imagejpeg($imageResource, $folderPath . '/' . $imageName, 75); // 75% quality
+                imagedestroy($imageResource);
+                $validated['avatar'] = 'avatars/' . $imageName;
+            }
         }
 
-        // Simpan proof images
+        // Simpan proof images (upload multi)
         $proofPaths = [];
         if ($request->hasFile('proof')) {
             $proofFolder = public_path('proofs');
             if (!is_dir($proofFolder)) mkdir($proofFolder, 0755, true);
 
             foreach ($request->file('proof') as $file) {
-                $fileName = time() . '-' . uniqid() . '.' . $file->extension();
-                $file->move($proofFolder, $fileName);
-                $proofPaths[] = 'proofs/' . $fileName;
+                $fileName = time() . '-' . uniqid() . '.jpg';
+                $targetPath = $proofFolder . '/' . $fileName;
+
+                // Kompresi
+                $imageResource = imagecreatefromstring(file_get_contents($file->getRealPath()));
+                if ($imageResource !== false) {
+                    imagejpeg($imageResource, $targetPath, 25);
+                    imagedestroy($imageResource);
+                    $proofPaths[] = 'proofs/' . $fileName;
+                }
             }
+
             $validated['proof'] = json_encode($proofPaths);
         }
 
-        // Simpan KTP
+        // Simpan KTP (upload single)
         if ($request->hasFile('file_ktp')) {
             $ktpFolder = public_path('ktp');
             if (!is_dir($ktpFolder)) mkdir($ktpFolder, 0755, true);
 
             $ktpFile = $request->file('file_ktp');
-            $ktpFileName = time() . '-' . uniqid() . '.' . $ktpFile->extension();
-            $ktpFile->move($ktpFolder, $ktpFileName);
-            $validated['file_ktp'] = 'ktp/' . $ktpFileName;
+            $ktpFileName = time() . '-' . uniqid() . '.jpg';
+            $targetPath = $ktpFolder . '/' . $ktpFileName;
+
+            $imageResource = imagecreatefromstring(file_get_contents($ktpFile->getRealPath()));
+            if ($imageResource !== false) {
+                imagejpeg($imageResource, $targetPath, 75);
+                imagedestroy($imageResource);
+                $validated['file_ktp'] = 'ktp/' . $ktpFileName;
+            }
         } else {
             unset($validated['file_ktp']);
         }
@@ -370,6 +388,7 @@ class CandidateController extends Controller
     public function education_store(Request $request, Candidate $candidate)
     {
         $request->validate([
+            'educations' => 'array',
             'educations.*.institution_name' => 'required|string',
             'educations.*.level' => 'nullable|string',
             'educations.*.major' => 'nullable|string',
@@ -380,8 +399,11 @@ class CandidateController extends Controller
         ]);
 
         $candidate->educations()->delete();
-        foreach ($request->educations as $edu) {
-            $candidate->educations()->create($edu);
+
+        if (!empty($request->educations)) {
+            foreach ($request->educations as $edu) {
+                $candidate->educations()->create($edu);
+            }
         }
 
         return redirect()->route('candidate.dashboard')->with('success', 'Data pendidikan berhasil disimpan.');
@@ -395,6 +417,7 @@ class CandidateController extends Controller
     public function education_update(Request $request, Candidate $candidate)
     {
         $request->validate([
+            'educations' => 'array',
             'educations.*.institution_name' => 'required|string',
             'educations.*.level' => 'nullable|string',
             'educations.*.major' => 'nullable|string',
@@ -405,8 +428,11 @@ class CandidateController extends Controller
         ]);
 
         $candidate->educations()->delete();
-        foreach ($request->educations as $edu) {
-            $candidate->educations()->create($edu);
+
+        if (!empty($request->educations)) {
+            foreach ($request->educations as $edu) {
+                $candidate->educations()->create($edu);
+            }
         }
 
         return redirect()->route('candidate.dashboard')->with('success', 'Data pendidikan berhasil diperbarui.');
@@ -420,15 +446,18 @@ class CandidateController extends Controller
     public function organization_store(Request $request, Candidate $candidate)
     {
         $validated = $request->validate([
+            'organizations' => 'required|array|min:1',
             'organizations.*.organization_name' => 'required|string',
             'organizations.*.position' => 'nullable|string',
             'organizations.*.year' => 'nullable|string',
             'organizations.*.description' => 'nullable|string',
         ]);
 
+        // Clear old data
         $candidate->organizations()->delete();
 
-        foreach ($request->organizations as $org) {
+        // Insert new
+        foreach ($validated['organizations'] as $org) {
             $candidate->organizations()->create($org);
         }
 
@@ -443,18 +472,71 @@ class CandidateController extends Controller
     public function organization_update(Request $request, Candidate $candidate)
     {
         $validated = $request->validate([
+            'organizations' => 'nullable|array',
             'organizations.*.organization_name' => 'required|string',
             'organizations.*.position' => 'nullable|string',
             'organizations.*.year' => 'nullable|string',
             'organizations.*.description' => 'nullable|string',
         ]);
 
+        // Hapus semua data lama
         $candidate->organizations()->delete();
 
-        foreach ($request->organizations as $org) {
+        // Simpan ulang hanya jika data baru tersedia
+        foreach ($validated['organizations'] ?? [] as $org) {
             $candidate->organizations()->create($org);
         }
 
         return redirect()->route('candidate.dashboard')->with('success', 'Data organisasi berhasil diperbarui.');
+    }
+
+    public function achievement_create(Candidate $candidate)
+    {
+        return view('candidate.achievement.create', compact('candidate'));
+    }
+
+    public function achievement_store(Request $request, Candidate $candidate)
+    {
+        $validated = $request->validate([
+            'achievements' => 'required|array|min:1',
+            'achievements.*.title' => 'required|string',
+            'achievements.*.year' => 'nullable|integer',
+            'achievements.*.issuer' => 'nullable|string',
+            'achievements.*.description' => 'nullable|string',
+        ]);
+
+        $candidate->achievements()->delete();
+
+        foreach ($validated['achievements'] as $item) {
+            $candidate->achievements()->create($item);
+        }
+
+        return redirect()->route('candidate.dashboard')->with('success', 'Data prestasi berhasil disimpan.');
+    }
+
+    public function achievement_edit(Candidate $candidate)
+    {
+        return view('candidate.achievement.edit', compact('candidate'));
+    }
+
+    public function achievement_update(Request $request, Candidate $candidate)
+    {
+        $validated = $request->validate([
+            'achievements' => 'array',
+            'achievements.*.title' => 'required|string',
+            'achievements.*.year' => 'nullable|integer',
+            'achievements.*.issuer' => 'nullable|string',
+            'achievements.*.description' => 'nullable|string',
+        ]);
+
+        $candidate->achievements()->delete();
+
+        if (!empty($validated['achievements'])) {
+            foreach ($validated['achievements'] as $item) {
+                $candidate->achievements()->create($item);
+            }
+        }
+
+        return redirect()->route('candidate.dashboard')->with('success', 'Data prestasi berhasil diperbarui.');
     }
 }

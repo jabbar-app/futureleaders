@@ -76,8 +76,8 @@
       </div>
       <div class="position-relative mb-4">
         @if (old('avatar', $candidate->avatar ?? ''))
-          <img id="avatarPreview" class="img-fluid rounded" src="{{ old('avatar', asset($candidate->avatar) ?? '') }}"
-            style="max-height:200px;">
+          <img id="avatarPreview" class="img-fluid rounded"
+            src="{{ old('avatar') ?: (isset($candidate) && $candidate->avatar ? asset($candidate->avatar) : '') }}">
         @else
           <img id="avatarPreview" class="img-fluid rounded d-none mt-2" style="max-height:200px;">
         @endif
@@ -254,7 +254,8 @@
           menyebarkan dampak positif.
         </p>
         <p style="margin-bottom: 0;">
-          Klik untuk unduh <a href="/poster" target="_blank" style="font-weight: bold; color: #0d6efd;">Poster dan Caption</a>
+          Klik untuk unduh <a href="/poster" target="_blank" style="font-weight: bold; color: #0d6efd;">Poster dan
+            Caption</a>
         </p>
       </div>
 

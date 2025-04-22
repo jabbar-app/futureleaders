@@ -27,7 +27,7 @@
 
             <div id="registration-alert">
               <div id="registration-closed-info" class="d-none">
-                <div class="fl-alert mb-0 alert-dismissible" role="alert">
+                <div class="fl-alert mb-0" role="alert">
                   <h5 class="alert-heading mb-2">Pendaftaran Telah Ditutup</h5>
                   <p class="mb-0">
                     Terima kasih atas partisipasimu! Pendaftaran telah resmi ditutup. <br>
@@ -38,14 +38,13 @@
               </div>
 
               @if (!$allFilled)
-                <div class="fl-alert mb-0 alert-dismissible" role="alert">
+                <div class="fl-alert mb-0" role="alert">
                   <h5 class="alert-heading mb-2">Lengkapi Data Pendaftaranmu</h5>
                   <p class="mb-0">
                     Terima kasih telah memulai proses pendaftaran. Yuk, pastikan seluruh data kamu sudah lengkap,
                     termasuk: <strong>Motivasi, Pendidikan, Prestasi, dan Organisasi</strong>. Data lengkap akan menjadi
                     bahan penilaian penting bagi tim seleksi.
                   </p>
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
               @else
                 <div class="alert alert-success mb-0 alert-dismissible" role="alert">
