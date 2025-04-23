@@ -188,7 +188,7 @@ class CandidateController extends Controller
                 // Kompresi
                 $imageResource = imagecreatefromstring(file_get_contents($file->getRealPath()));
                 if ($imageResource !== false) {
-                    imagejpeg($imageResource, $targetPath, 25);
+                    imagejpeg($imageResource, $targetPath, 10);
                     imagedestroy($imageResource);
                     $proofPaths[] = 'proofs/' . $fileName;
                 }
@@ -319,10 +319,14 @@ class CandidateController extends Controller
             }
 
             $imageDecoded = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
-            file_put_contents($folderPath . '/' . $imageName, $imageDecoded);
-            $validated['avatar'] = 'avatars/' . $imageName;
+            $imageResource = imagecreatefromstring($imageDecoded);
+
+            if ($imageResource !== false) {
+                imagejpeg($imageResource, $folderPath . '/' . $imageName, 75); // Kompres ke 75%
+                imagedestroy($imageResource);
+                $validated['avatar'] = 'avatars/' . $imageName;
+            }
         } else {
-            // Jangan ubah avatar jika tidak ada update
             unset($validated['avatar']);
         }
 
@@ -343,10 +347,17 @@ class CandidateController extends Controller
             if (!is_dir($proofFolder)) mkdir($proofFolder, 0755, true);
 
             foreach ($request->file('proof') as $file) {
-                $fileName = time() . '-' . uniqid() . '.' . $file->extension();
-                $file->move($proofFolder, $fileName);
-                $proofPaths[] = 'proofs/' . $fileName;
+                $fileName = time() . '-' . uniqid() . '.jpg';
+                $targetPath = $proofFolder . '/' . $fileName;
+
+                $imageResource = imagecreatefromstring(file_get_contents($file->getRealPath()));
+                if ($imageResource !== false) {
+                    imagejpeg($imageResource, $targetPath, 10); // Kompres ke 10% (ekstrem)
+                    imagedestroy($imageResource);
+                    $proofPaths[] = 'proofs/' . $fileName;
+                }
             }
+
             $validated['proof'] = json_encode($proofPaths);
         }
 
@@ -361,9 +372,15 @@ class CandidateController extends Controller
             if (!is_dir($ktpFolder)) mkdir($ktpFolder, 0755, true);
 
             $ktpFile = $request->file('file_ktp');
-            $ktpFileName = time() . '-' . uniqid() . '.' . $ktpFile->extension();
-            $ktpFile->move($ktpFolder, $ktpFileName);
-            $validated['file_ktp'] = 'ktp/' . $ktpFileName;
+            $ktpFileName = time() . '-' . uniqid() . '.jpg';
+            $targetPath = $ktpFolder . '/' . $ktpFileName;
+
+            $imageResource = imagecreatefromstring(file_get_contents($ktpFile->getRealPath()));
+            if ($imageResource !== false) {
+                imagejpeg($imageResource, $targetPath, 75); // Kompres ke 75%
+                imagedestroy($imageResource);
+                $validated['file_ktp'] = 'ktp/' . $ktpFileName;
+            }
         }
 
         // Update data kandidat
