@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Candidate;
-use App\Models\SelectionPhase;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\SelectionPhase;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver as GdDriver;
 
 class CandidateController extends Controller
 {
@@ -155,24 +157,23 @@ class CandidateController extends Controller
             }
         }
 
+        $manager = new ImageManager(new GdDriver());
+
         // Simpan avatar (base64)
         if ($request->filled('avatar')) {
             $imageData = $request->avatar;
             $imageName = time() . '-' . uniqid() . '.jpg';
             $folderPath = public_path('avatars');
 
-            if (!is_dir($folderPath)) {
-                mkdir($folderPath, 0755, true);
-            }
+            if (!is_dir($folderPath)) mkdir($folderPath, 0755, true);
 
-            $imageDecoded = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
-            $imageResource = imagecreatefromstring($imageDecoded);
+            $imageBinary = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
 
-            if ($imageResource !== false) {
-                imagejpeg($imageResource, $folderPath . '/' . $imageName, 75); // 75% quality
-                imagedestroy($imageResource);
-                $validated['avatar'] = 'avatars/' . $imageName;
-            }
+            $manager->read($imageBinary)
+                ->toJpeg(75)
+                ->save($folderPath . '/' . $imageName);
+
+            $validated['avatar'] = 'avatars/' . $imageName;
         }
 
         // Simpan proof images (upload multi)
@@ -185,13 +186,11 @@ class CandidateController extends Controller
                 $fileName = time() . '-' . uniqid() . '.jpg';
                 $targetPath = $proofFolder . '/' . $fileName;
 
-                // Kompresi
-                $imageResource = imagecreatefromstring(file_get_contents($file->getRealPath()));
-                if ($imageResource !== false) {
-                    imagejpeg($imageResource, $targetPath, 10);
-                    imagedestroy($imageResource);
-                    $proofPaths[] = 'proofs/' . $fileName;
-                }
+                $manager->read(file_get_contents($file->getRealPath()))
+                    ->toJpeg(10) // Kompres proof lebih ekstrem
+                    ->save($targetPath);
+
+                $proofPaths[] = 'proofs/' . $fileName;
             }
 
             $validated['proof'] = json_encode($proofPaths);
@@ -206,12 +205,11 @@ class CandidateController extends Controller
             $ktpFileName = time() . '-' . uniqid() . '.jpg';
             $targetPath = $ktpFolder . '/' . $ktpFileName;
 
-            $imageResource = imagecreatefromstring(file_get_contents($ktpFile->getRealPath()));
-            if ($imageResource !== false) {
-                imagejpeg($imageResource, $targetPath, 75);
-                imagedestroy($imageResource);
-                $validated['file_ktp'] = 'ktp/' . $ktpFileName;
-            }
+            $manager->read(file_get_contents($ktpFile->getRealPath()))
+                ->toJpeg(75)
+                ->save($targetPath);
+
+            $validated['file_ktp'] = 'ktp/' . $ktpFileName;
         } else {
             unset($validated['file_ktp']);
         }
@@ -221,11 +219,13 @@ class CandidateController extends Controller
         $candidate = Candidate::create($validated);
 
         try {
-            $number = '628990980799';
+            $numbers = ['628990980799', '6281273952234'];
             $candidateUrl = url('/candidate/detail/' . $candidate->id);
-            $message = ("Halo Admin, ada Pendaftar baru dengan nama '{$candidate->user->name}'.\n\nLihat detailnya di: {$candidateUrl}");
+            $message = "Halo Admin, ada Pendaftar baru dengan nama '{$candidate->user->name}'.\n\nLihat detailnya di: {$candidateUrl}";
 
-            app(WhatsappController::class)->sendNotification($message, $number);
+            foreach ($numbers as $number) {
+                app(WhatsappController::class)->sendNotification($message, $number);
+            }
         } catch (\Exception $e) {
             Log::error('WhatsApp notification failed: ' . $e->getMessage());
         }
@@ -303,9 +303,10 @@ class CandidateController extends Controller
             return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengedit data ini.');
         }
 
+        $manager = new ImageManager(new GdDriver());
+
         // Update avatar jika ada
         if ($request->filled('avatar') && strpos($request->avatar, 'data:image') === 0) {
-            // Hapus avatar lama jika ada
             if ($candidate->avatar && file_exists(public_path($candidate->avatar))) {
                 unlink(public_path($candidate->avatar));
             }
@@ -314,25 +315,21 @@ class CandidateController extends Controller
             $imageName = time() . '-' . uniqid() . '.jpg';
             $folderPath = public_path('avatars');
 
-            if (!is_dir($folderPath)) {
-                mkdir($folderPath, 0755, true);
-            }
+            if (!is_dir($folderPath)) mkdir($folderPath, 0755, true);
 
-            $imageDecoded = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
-            $imageResource = imagecreatefromstring($imageDecoded);
+            $imageBinary = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
 
-            if ($imageResource !== false) {
-                imagejpeg($imageResource, $folderPath . '/' . $imageName, 75); // Kompres ke 75%
-                imagedestroy($imageResource);
-                $validated['avatar'] = 'avatars/' . $imageName;
-            }
+            $manager->read($imageBinary)
+                ->toJpeg(75)
+                ->save($folderPath . '/' . $imageName);
+
+            $validated['avatar'] = 'avatars/' . $imageName;
         } else {
             unset($validated['avatar']);
         }
 
         // Update proof images jika ada
         if ($request->hasFile('proof')) {
-            // Hapus bukti lama jika ada
             if ($candidate->proof) {
                 $oldProofs = json_decode($candidate->proof, true);
                 foreach ($oldProofs as $oldProof) {
@@ -350,20 +347,18 @@ class CandidateController extends Controller
                 $fileName = time() . '-' . uniqid() . '.jpg';
                 $targetPath = $proofFolder . '/' . $fileName;
 
-                $imageResource = imagecreatefromstring(file_get_contents($file->getRealPath()));
-                if ($imageResource !== false) {
-                    imagejpeg($imageResource, $targetPath, 10); // Kompres ke 10% (ekstrem)
-                    imagedestroy($imageResource);
-                    $proofPaths[] = 'proofs/' . $fileName;
-                }
+                $manager->read(file_get_contents($file->getRealPath()))
+                    ->toJpeg(10) // Kompres maksimal
+                    ->save($targetPath);
+
+                $proofPaths[] = 'proofs/' . $fileName;
             }
 
             $validated['proof'] = json_encode($proofPaths);
         }
 
-        // Update KTP jika ada
+        // Update file KTP jika ada
         if ($request->hasFile('file_ktp')) {
-            // Hapus KTP lama jika ada
             if ($candidate->file_ktp && file_exists(public_path($candidate->file_ktp))) {
                 unlink(public_path($candidate->file_ktp));
             }
@@ -375,12 +370,11 @@ class CandidateController extends Controller
             $ktpFileName = time() . '-' . uniqid() . '.jpg';
             $targetPath = $ktpFolder . '/' . $ktpFileName;
 
-            $imageResource = imagecreatefromstring(file_get_contents($ktpFile->getRealPath()));
-            if ($imageResource !== false) {
-                imagejpeg($imageResource, $targetPath, 75); // Kompres ke 75%
-                imagedestroy($imageResource);
-                $validated['file_ktp'] = 'ktp/' . $ktpFileName;
-            }
+            $manager->read(file_get_contents($ktpFile->getRealPath()))
+                ->toJpeg(75)
+                ->save($targetPath);
+
+            $validated['file_ktp'] = 'ktp/' . $ktpFileName;
         }
 
         // Update data kandidat
