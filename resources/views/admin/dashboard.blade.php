@@ -186,7 +186,7 @@
                       {{ $candidate->gender }}
                     </td>
                     <td>
-                      {{ $candidate->birth_date }}
+                      {{ \Carbon\Carbon::parse($candidate->birth_date)->age }} tahun
                     </td>
                     <td>
                       <div class="dropdown">
