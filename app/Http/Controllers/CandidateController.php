@@ -150,88 +150,92 @@ class CandidateController extends Controller
             'file_ktp' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Ubah empty string jadi null untuk nullable fields
         foreach (['instagram', 'religion', 'father_status', 'mother_status'] as $field) {
             if (empty($validated[$field])) {
                 $validated[$field] = null;
             }
         }
 
-        $manager = new ImageManager(new GdDriver());
-
-        // Simpan avatar (base64)
-        if ($request->filled('avatar')) {
-            $imageData = $request->avatar;
-            $imageName = time() . '-' . uniqid() . '.jpg';
-            $folderPath = public_path('avatars');
-
-            if (!is_dir($folderPath)) mkdir($folderPath, 0755, true);
-
-            $imageBinary = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
-
-            $manager->read($imageBinary)
-                ->toJpeg(75)
-                ->save($folderPath . '/' . $imageName);
-
-            $validated['avatar'] = 'avatars/' . $imageName;
-        }
-
-        // Simpan proof images (upload multi)
-        $proofPaths = [];
-        if ($request->hasFile('proof')) {
-            $proofFolder = public_path('proofs');
-            if (!is_dir($proofFolder)) mkdir($proofFolder, 0755, true);
-
-            foreach ($request->file('proof') as $file) {
-                $fileName = time() . '-' . uniqid() . '.jpg';
-                $targetPath = $proofFolder . '/' . $fileName;
-
-                $manager->read(file_get_contents($file->getRealPath()))
-                    ->toJpeg(10) // Kompres proof lebih ekstrem
-                    ->save($targetPath);
-
-                $proofPaths[] = 'proofs/' . $fileName;
-            }
-
-            $validated['proof'] = json_encode($proofPaths);
-        }
-
-        // Simpan KTP (upload single)
-        if ($request->hasFile('file_ktp')) {
-            $ktpFolder = public_path('ktp');
-            if (!is_dir($ktpFolder)) mkdir($ktpFolder, 0755, true);
-
-            $ktpFile = $request->file('file_ktp');
-            $ktpFileName = time() . '-' . uniqid() . '.jpg';
-            $targetPath = $ktpFolder . '/' . $ktpFileName;
-
-            $manager->read(file_get_contents($ktpFile->getRealPath()))
-                ->toJpeg(75)
-                ->save($targetPath);
-
-            $validated['file_ktp'] = 'ktp/' . $ktpFileName;
-        } else {
-            unset($validated['file_ktp']);
-        }
-
-        $validated['user_id'] = Auth::id();
-
-        $candidate = Candidate::create($validated);
-
         try {
-            $numbers = ['628990980799', '6281273952234'];
-            $candidateUrl = url('/candidate/detail/' . $candidate->id);
-            $message = "Halo Admin, ada Pendaftar baru dengan nama '{$candidate->user->name}'.\n\nLihat detailnya di: {$candidateUrl}";
+            $manager = new ImageManager(new GdDriver());
 
-            foreach ($numbers as $number) {
-                app(WhatsappController::class)->sendNotification($message, $number);
+            // Simpan avatar base64
+            if ($request->filled('avatar')) {
+                $imageData = $request->avatar;
+                $imageBinary = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
+
+                if ($imageBinary === false) {
+                    return back()->withErrors(['avatar' => 'Gagal memproses gambar avatar.'])->withInput();
+                }
+
+                $avatarPath = public_path('avatars');
+                if (!is_dir($avatarPath)) mkdir($avatarPath, 0755, true);
+
+                $avatarName = time() . '-' . uniqid() . '.jpg';
+                $manager->read($imageBinary)->toJpeg(75)->save($avatarPath . '/' . $avatarName);
+
+                $validated['avatar'] = 'avatars/' . $avatarName;
             }
-        } catch (\Exception $e) {
-            Log::error('WhatsApp notification failed: ' . $e->getMessage());
-        }
 
-        return redirect()->route('candidate.dashboard')->with('success', 'Profil kandidat berhasil disimpan.');
+            // Simpan bukti proof
+            $proofPaths = [];
+            if ($request->hasFile('proof')) {
+                $proofPath = public_path('proofs');
+                if (!is_dir($proofPath)) mkdir($proofPath, 0755, true);
+
+                foreach ($request->file('proof') as $file) {
+                    $fileContent = file_get_contents($file->getRealPath());
+                    if (!$fileContent) continue;
+
+                    $fileName = time() . '-' . uniqid() . '.jpg';
+                    $manager->read($fileContent)->toJpeg(10)->save($proofPath . '/' . $fileName);
+                    $proofPaths[] = 'proofs/' . $fileName;
+                }
+
+                $validated['proof'] = json_encode($proofPaths);
+            }
+
+            // Simpan KTP
+            if ($request->hasFile('file_ktp')) {
+                $ktpPath = public_path('ktp');
+                if (!is_dir($ktpPath)) mkdir($ktpPath, 0755, true);
+
+                $ktpContent = file_get_contents($request->file('file_ktp')->getRealPath());
+                if ($ktpContent) {
+                    $ktpFileName = time() . '-' . uniqid() . '.jpg';
+                    $manager->read($ktpContent)->toJpeg(75)->save($ktpPath . '/' . $ktpFileName);
+                    $validated['file_ktp'] = 'ktp/' . $ktpFileName;
+                }
+            } else {
+                unset($validated['file_ktp']);
+            }
+
+            $validated['user_id'] = Auth::id();
+
+            $candidate = Candidate::create($validated);
+
+            try {
+                $numbers = ['628990980799', '6281273952234'];
+                $candidateUrl = url('/candidate/detail/' . $candidate->id);
+                $message = "Halo Admin, ada Pendaftar baru dengan nama '{$candidate->user->name}'.\n\nLihat detailnya di: {$candidateUrl}";
+
+                foreach ($numbers as $number) {
+                    app(WhatsappController::class)->sendNotification($message, $number);
+                }
+            } catch (\Exception $e) {
+                Log::error('WhatsApp notification failed: ' . $e->getMessage());
+            }
+
+            return redirect()->route('candidate.dashboard')->with('success', 'Profil kandidat berhasil disimpan.');
+        } catch (\Exception $e) {
+            Log::error('Gagal menyimpan data kandidat: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'user_id' => Auth::id(),
+            ]);
+            return back()->withErrors(['submit' => 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.'])->withInput();
+        }
     }
+
 
 
     public function show(Candidate $candidate)

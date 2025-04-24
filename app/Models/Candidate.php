@@ -2,11 +2,17 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Candidate extends Model
 {
     protected $guarded = ['id'];
+
+    public function getAgeAttribute()
+    {
+        return Carbon::parse($this->birth_date)->age;
+    }
 
     public function user()
     {
