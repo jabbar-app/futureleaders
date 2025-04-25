@@ -26,7 +26,7 @@
     </li>
     @if (Auth::user()->is_admin)
       <li class="menu-item {{ Route::is('candidate*') ? 'active' : '' }}">
-        <a href="{{ route('admin.dashboard') }}" class="menu-link">
+        <a href="{{ route('dashboard') }}" class="menu-link">
           <i class="menu-icon tf-icons ti ti-smart-home"></i>
           <div data-i18n="Dashboard">Dashboard</div>
         </a>
