@@ -28,7 +28,7 @@ Route::get('/auth/google/callback', [UserController::class, 'handleGoogleCallbac
 
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::post('/admin/send-reminder-emails', [AdminController::class, 'sendReminderEmails'])->name('admin.send-reminders');
-    Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::put('/admin/selection-phases/update-deadline', [AdminController::class, 'updatePhaseDeadline'])->name('admin.selection-phases.update-deadline');
 });
 Route::middleware(['auth', 'verified'])->group(function () {

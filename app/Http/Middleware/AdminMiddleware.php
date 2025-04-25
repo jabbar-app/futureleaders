@@ -14,8 +14,6 @@ class AdminMiddleware
             return $next($request);
         }
 
-        redirect()->route('candidate.dashboard');
-
-        // abort(403, 'Akses ditolak. Hanya admin yang dapat mengakses halaman ini.');
+        abort(403, 'Akses ditolak. Hanya admin yang dapat mengakses halaman ini.');
     }
 }
