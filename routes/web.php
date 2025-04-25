@@ -5,6 +5,7 @@ use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\CandidateMotivationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -19,14 +20,18 @@ Route::get('/poster', function () {
     return view('poster');
 });
 
-Route::post('/admin/send-reminder-emails', [AdminController::class, 'sendReminderEmails'])->name('admin.send-reminders');
+
 
 Route::get('/auth/google', [UserController::class, 'redirectToGoogle'])->name('auth.google.redirect');
 Route::get('/auth/google/callback', [UserController::class, 'handleGoogleCallback']);
 
-Route::middleware(['auth', 'verified'])->group(function () {
+
+Route::middleware(['auth', AdminMiddleware::class])->group(function () {
+    Route::post('/admin/send-reminder-emails', [AdminController::class, 'sendReminderEmails'])->name('admin.send-reminders');
     Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::put('/admin/selection-phases/update-deadline', [AdminController::class, 'updatePhaseDeadline'])->name('admin.selection-phases.update-deadline');
+});
+Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('dashboard', [CandidateController::class, 'dashboard'])->name('candidate.dashboard');
     Route::get('candidate/detail/{candidate}', [CandidateController::class, 'detail'])->name('candidate.detail');
