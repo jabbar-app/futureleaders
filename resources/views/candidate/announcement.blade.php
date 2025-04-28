@@ -16,28 +16,32 @@
               <h5 class="alert-heading mb-2">Selamat, Kamu Lulus Seleksi Administrasi!</h5>
               <p>
                 Future Leaders ID dengan bangga mengumumkan bahwa kamu telah <strong>lulus Seleksi Administrasi</strong>.
-                Kami mengundangmu untuk melakukan <strong>Konfirmasi Kelulusan</strong> untuk melanjutkan ke tahap
-                <strong>Seleksi Online</strong>.
               </p>
+              <p>
+                Untuk melanjutkan ke tahap <strong>Seleksi Online</strong>, kamu diwajibkan mengikuti <strong>Sesi
+                  Onboarding Seleksi Online</strong> yang akan diadakan pada <strong>Selasa, 29 April 2025</strong>.
+              </p>
+              <p>
+                Pilih salah satu jadwal berikut untuk mengikuti Sesi Onboarding:
+              </p>
+              <ul>
+                <li>15.00 WIB - Selesai</li>
+                <li>17.00 WIB - Selesai</li>
+                <li>19.00 WIB - Selesai</li>
+                <li>21.00 WIB - Selesai</li>
+              </ul>
               <p class="mb-2">
-                Silakan lakukan konfirmasi sebelum <strong>Selasa, 29 April 2025 pukul 09.00 WIB</strong>.
+                Silakan lakukan <strong>Konfirmasi Jadwal</strong> melalui link berikut:
               </p>
-
-              @php
-                // Set waktu buka link konfirmasi ke hari ini jam 20.00 WIB
-                $confirmationLinkOpenTime = now()->setTimezone('Asia/Jakarta')->setTime(20, 0);
-                $currentTime = now()->setTimezone('Asia/Jakarta');
-              @endphp
-
-              @if ($currentTime->greaterThanOrEqualTo($confirmationLinkOpenTime))
-                <a href="#" class="btn btn-success mt-3">
-                  Konfirmasi Kelulusan
+              <p>
+                <a href="https://calndr.inisiator.com/book/onboarding-seleksi-online-future-leaders-id" target="_blank"
+                  class="btn btn-success">
+                  Konfirmasi Jadwal Onboarding
                 </a>
-              @else
-                <button class="btn btn-secondary mt-3" disabled>
-                  Link Konfirmasi Akan Dibuka Pukul 20.00 WIB
-                </button>
-              @endif
+              </p>
+              <p class="mt-3 mb-0">
+                Batas waktu konfirmasi: <strong>Selasa, 29 April 2025 pukul 09.00 WIB</strong>.
+              </p>
             </div>
 
           </div>
