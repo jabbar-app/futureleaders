@@ -14,6 +14,8 @@ class CandidateController extends Controller
 {
     public function dashboard()
     {
+        return view('candidate.announcement');
+
         $candidate = Candidate::with(['educations', 'achievements', 'organizations', 'motivation', 'scores.selectionPhase'])
             ->where('user_id', Auth::id())
             ->first();
