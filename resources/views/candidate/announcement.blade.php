@@ -24,8 +24,8 @@
               </p>
 
               @php
-                // Set waktu buka link konfirmasi ke hari ini jam 19.00 WIB
-                $confirmationLinkOpenTime = now()->setTimezone('Asia/Jakarta')->setTime(19, 0);
+                // Set waktu buka link konfirmasi ke hari ini jam 20.00 WIB
+                $confirmationLinkOpenTime = now()->setTimezone('Asia/Jakarta')->setTime(20, 0);
                 $currentTime = now()->setTimezone('Asia/Jakarta');
               @endphp
 
@@ -35,7 +35,7 @@
                 </a>
               @else
                 <button class="btn btn-secondary mt-3" disabled>
-                  Link Konfirmasi Akan Dibuka Pukul 19.00 WIB
+                  Link Konfirmasi Akan Dibuka Pukul 20.00 WIB
                 </button>
               @endif
             </div>
