@@ -11,7 +11,24 @@
 
   <title>Future Leaders ID</title>
 
-  <meta name="description" content="" />
+  <meta name="description" content="Future Leaders ID adalah program pengembangan kepemimpinan untuk anak muda Indonesia. Temukan potensi terbaikmu dan wujudkan masa depan yang berdampak!" />
+
+  <!-- Open Graph Meta Tags (Universal for Future Leaders ID) -->
+  <meta property="og:title" content="Future Leaders ID - Temukan Potensimu, Bangun Masa Depanmu!" />
+  <meta property="og:description"
+    content="Future Leaders ID adalah program pengembangan kepemimpinan dan potensi anak muda Indonesia melalui pelatihan, seleksi, dan pengalaman berharga." />
+  <meta property="og:image" content="{{ asset('assets/images/YFLI.png') }}" />
+  <meta property="og:url" content="{{ url()->current() }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Future Leaders ID" />
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Future Leaders ID - Temukan Potensimu, Bangun Masa Depanmu!" />
+  <meta name="twitter:description"
+    content="Bergabunglah dalam program pengembangan kepemimpinan untuk generasi muda Indonesia." />
+  <meta name="twitter:image" content="{{ asset('assets/images/YFLI.png') }}" />
+
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="{{ asset('assets/fli/favicon.png') }}" />
