@@ -26,11 +26,15 @@ Route::get('/auth/google', [UserController::class, 'redirectToGoogle'])->name('a
 Route::get('/auth/google/callback', [UserController::class, 'handleGoogleCallback']);
 
 
-Route::middleware(['auth', AdminMiddleware::class])->group(function () {
-    Route::post('/admin/send-reminder-emails', [AdminController::class, 'sendReminderEmails'])->name('admin.send-reminders');
-    Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-    Route::put('/admin/selection-phases/update-deadline', [AdminController::class, 'updatePhaseDeadline'])->name('admin.selection-phases.update-deadline');
+Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::put('/selection-phases/update-deadline', [AdminController::class, 'updatePhaseDeadline'])->name('admin.selection-phases.update-deadline');
+
+    Route::post('/send-reminder-emails', [AdminController::class, 'sendReminderEmails'])->name('admin.sendReminderEmail');
+    Route::post('/send-reminder-whatsapp', [AdminController::class, 'sendReminderWhatsapp'])->name('admin.sendReminderWhatsapp');
+    Route::post('/preview-reminder-count', [AdminController::class, 'previewReminderCount'])->name('admin.previewReminderCount');
 });
+
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('dashboard', [CandidateController::class, 'dashboard'])->name('candidate.dashboard');

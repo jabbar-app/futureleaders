@@ -76,7 +76,6 @@
           </div>
         </div>
 
-
         <div class="card mb-4">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
@@ -88,10 +87,73 @@
               ⏳ Sedang mengirim email ke <span id="currentCount">0</span> / {{ $reminderCount }}...
             </div>
 
-            <form action="{{ route('admin.send-reminders') }}" method="POST" id="reminderForm">
+            <form action="{{ route('admin.sendReminderEmail') }}" method="POST" id="reminderForm">
               @csrf
               <button type="submit" class="btn btn-outline-danger mt-3" id="sendReminderBtn">
                 <i class="ti ti-mail"></i> Kirim Email Reminder
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0 text-success">Reminder WhatsApp</h5>
+              <small class="text-muted">Filter berdasarkan Batch dan Tahapan Seleksi</small>
+            </div>
+
+            <div id="waSendingStatus" class="text-muted mt-3" style="display: none;">
+              ⏳ Sedang mengirim WhatsApp ke <span id="waCurrentCount">0</span> kandidat...
+            </div>
+
+            <form action="{{ route('admin.sendReminderWhatsapp') }}" method="POST" id="waReminderForm">
+              @csrf
+              <div class="row mt-3">
+                <div class="col-md-3">
+                  <label for="batch" class="form-label">Batch</label>
+                  <select name="batch" id="batch" class="form-select">
+                    <option value="">Semua Batch</option>
+                    @foreach ($candidates->pluck('batch')->unique() as $batch)
+                      <option value="{{ $batch }}">{{ $batch }}</option>
+                    @endforeach
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label for="status" class="form-label">Tahapan (Stage)</label>
+                  <select name="status" id="status" class="form-select">
+                    <option value="">Semua Stage</option>
+                    <option value="Stage 1">Stage 1 - Seleksi Berkas</option>
+                    <option value="Stage 2">Stage 2 - Seleksi Online</option>
+                    <option value="Stage 3">Stage 3 - Social Project</option>
+                    <option value="Stage 4">Stage 4 - Final Interview</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label for="is_confirmed" class="form-label">Status Konfirmasi</label>
+                  <select name="is_confirmed" id="is_confirmed" class="form-select">
+                    <option value="">Semua</option>
+                    <option value="with_link">Sudah Konfirmasi</option>
+                    <option value="without_link">Belum Konfirmasi</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Jumlah Kandidat</label>
+                  <div class="bg-label-info py-2 px-3 rounded">
+                    <span id="filteredCount">...</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <label for="waMessage" class="form-label">Pesan WhatsApp</label>
+                <textarea name="message" id="waMessage" rows="3" class="form-control"
+                  placeholder="Halo {name}, ayo lengkapi pendaftaran kamu sekarang..."></textarea>
+                <small class="text-muted">Gunakan <code>{name}</code> untuk otomatis isi nama user.</small>
+              </div>
+
+              <button type="submit" class="btn btn-outline-success mt-3" id="sendWaReminderBtn">
+                <i class="ti ti-brand-whatsapp"></i> Kirim WhatsApp Reminder
               </button>
             </form>
           </div>
@@ -133,8 +195,8 @@
                         </td>
                         <td>
                           <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" name="phases[{{ $phase->id }}][is_active]"
-                              {{ $phase->is_active ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox"
+                              name="phases[{{ $phase->id }}][is_active]" {{ $phase->is_active ? 'checked' : '' }}>
                           </div>
                         </td>
                       </tr>
@@ -263,6 +325,58 @@
           }
         });
       }
+
+      document.getElementById('waReminderForm').addEventListener('submit', function(e) {
+        const btn = document.getElementById('sendWaReminderBtn');
+        const status = document.getElementById('waSendingStatus');
+        const count = document.getElementById('waCurrentCount');
+
+        btn.disabled = true;
+        status.style.display = 'block';
+
+        let current = 0;
+        const total = {{ $reminderCount }};
+        const interval = setInterval(() => {
+          current++;
+          if (current >= total) clearInterval(interval);
+          count.innerText = current;
+        }, 800); // simulasi animasi progres tiap 0.8 detik
+      });
+
+      const batch = document.getElementById('batch');
+      const status = document.getElementById('status');
+      const isConfirmed = document.getElementById('is_confirmed');
+      const filteredCount = document.getElementById('filteredCount');
+
+      function updateFilteredCount() {
+        fetch(`{{ route('admin.previewReminderCount') }}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+              batch: batch.value,
+              status: status.value,
+              is_confirmed: isConfirmed.value
+            })
+          })
+          .then(response => response.json())
+          .then(data => {
+            filteredCount.textContent = data.count;
+          })
+          .catch(error => {
+            filteredCount.textContent = 'Gagal';
+            console.error('Gagal mengambil jumlah kandidat:', error);
+          });
+      }
+
+      batch.addEventListener('change', updateFilteredCount);
+      status.addEventListener('change', updateFilteredCount);
+      isConfirmed.addEventListener('change', updateFilteredCount);
+
+      // Panggil saat halaman dimuat pertama kali
+      updateFilteredCount();
     });
   </script>
 @endpush

@@ -14,8 +14,6 @@ class CandidateController extends Controller
 {
     public function dashboard()
     {
-        return view('candidate.announcement');
-
         $candidate = Candidate::with(['educations', 'achievements', 'organizations', 'motivation', 'scores.selectionPhase'])
             ->where('user_id', Auth::id())
             ->first();
@@ -24,6 +22,10 @@ class CandidateController extends Controller
             return redirect()
                 ->route('candidate.create')
                 ->with('info', 'Silakan lengkapi Profil Pendaftaran kamu terlebih dahulu.');
+        }
+
+        if ($candidate->status == 'Stage 2') {
+            return view('candidate.stage-2', compact('candidate'));
         }
 
         $incompleteFields = $this->getIncompleteFields($candidate);
@@ -555,5 +557,24 @@ class CandidateController extends Controller
         }
 
         return redirect()->route('candidate.dashboard')->with('success', 'Data prestasi berhasil diperbarui.');
+    }
+
+    public function updateConfirmationLink(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required|string',
+            'link' => 'required|url',
+        ]);
+
+        $candidate = Candidate::where('phone', $request->phone)->first();
+
+        if (!$candidate) {
+            return response()->json(['message' => 'Candidate not found.'], 404);
+        }
+
+        $candidate->confirmation_link = $request->link;
+        $candidate->save();
+
+        return response()->json(['message' => 'Confirmation link updated successfully.']);
     }
 }

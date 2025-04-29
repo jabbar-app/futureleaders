@@ -25,7 +25,7 @@
       <span class="menu-header-text" data-i18n="Apps & Pages">Apps &amp; Pages</span>
     </li>
     @if (Auth::user()->is_admin)
-      <li class="menu-item {{ Route::is('candidate*') ? 'active' : '' }}">
+      <li class="menu-item {{ Route::is('dashboard*') ? 'active' : '' }}">
         <a href="{{ route('dashboard') }}" class="menu-link">
           <i class="menu-icon tf-icons ti ti-smart-home"></i>
           <div data-i18n="Dashboard">Dashboard</div>

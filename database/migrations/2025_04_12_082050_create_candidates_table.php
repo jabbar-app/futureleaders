@@ -43,6 +43,9 @@ return new class extends Migration
             $table->integer('siblings_count')->nullable();
             $table->json('proof')->nullable();
             $table->string('file_ktp')->nullable();
+            $table->string('batch')->default('1');
+            $table->string('status')->default('Stage 1');
+            $table->string('confirmation_link')->nullable();
             $table->timestamps();
         });
     }
