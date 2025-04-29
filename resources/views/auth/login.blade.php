@@ -24,7 +24,7 @@
           <h3 class="mb-1">Welcome, Future Leaders! 👋</h3>
           <p class="mb-4">Gunakan akun Google kamu untuk login ke dashboard.</p>
 
-          @env('local')
+          {{-- @env('local') --}}
           @if ($errors->any())
             <div class="alert alert-danger">
               {{ $errors->first() }}
@@ -71,7 +71,7 @@
           <div class="divider my-4">
             <div class="divider-text">atau gunakan</div>
           </div>
-          @endenv
+          {{-- @endenv --}}
 
           {{-- <div class="d-flex justify-content-center">
             <a href="javascript:;" class="btn btn-icon btn-label-facebook me-3">
