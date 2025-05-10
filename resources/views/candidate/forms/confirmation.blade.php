@@ -8,7 +8,7 @@
       <hr class="m-0">
       <div class="card-body">
         @include('candidate.forms._form', [
-            'action' => route('form.confirmation.submit', $candidate),
+            'action' => route('confirmation.store', $candidate),
             'method' => 'POST',
             'submitLabel' => 'Konfirmasi Pendaftaran',
             'candidate' => $candidate,

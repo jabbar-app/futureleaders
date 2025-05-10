@@ -23,7 +23,7 @@ class CandidateController extends Controller
         $nextData = $candidate?->next;
 
         if ($existsInGround && !$nextData) {
-            return redirect()->route('form.confirmation', $candidate);
+            return redirect()->route('confirmation.create', $candidate);
         }
 
         $candidate = Candidate::with(['educations', 'achievements', 'organizations', 'motivation', 'scores.selectionPhase'])

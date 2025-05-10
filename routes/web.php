@@ -30,12 +30,17 @@ Route::get('/poster', function () {
 Route::get('/auth/google', [UserController::class, 'redirectToGoogle'])->name('auth.google.redirect');
 Route::get('/auth/google/callback', [UserController::class, 'handleGoogleCallback']);
 
-Route::get('/form/confirmation/{candidate}', [FormConfirmationController::class, 'show'])->name('form.confirmation');
-Route::post('/form/confirmation/{candidate}', [FormConfirmationController::class, 'submit'])->name('form.confirmation.submit');
+Route::middleware('auth')->prefix('confirmation')->group(function () {
+    Route::get('/{candidate}/create', [FormConfirmationController::class, 'create'])->name('confirmation.create');
+    Route::post('/{candidate}/store', [FormConfirmationController::class, 'store'])->name('confirmation.store');
+});
 
 Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::put('/selection-phases/update-deadline', [AdminController::class, 'updatePhaseDeadline'])->name('admin.selection-phases.update-deadline');
+
+    Route::get('confirmation-data', [FormConfirmationController::class, 'index'])->name('confirmation.index');
+    Route::get('confirmation-data/{id}', [FormConfirmationController::class, 'show'])->name('confirmation.show');
 
     Route::post('/send-reminder-emails', [AdminController::class, 'sendReminderEmails'])->name('admin.sendReminderEmail');
     Route::post('/send-reminder-whatsapp', [AdminController::class, 'sendReminderWhatsapp'])->name('admin.sendReminderWhatsapp');

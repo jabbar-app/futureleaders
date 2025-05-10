@@ -4,18 +4,45 @@ namespace App\Http\Controllers;
 
 use App\Models\Candidate;
 use App\Models\CandidateNext;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class FormConfirmationController extends Controller
 {
-    public function show(Candidate $candidate)
+    // Menampilkan semua data konfirmasi milik user yang sedang login
+    public function index()
+    {
+        $user = Auth::user();
+        $candidates = CandidateNext::all();
+
+        return view('candidate.forms.index', compact('candidates'));
+    }
+
+    // Menampilkan form konfirmasi
+    public function create(Candidate $candidate)
     {
         return view('candidate.forms.confirmation', compact('candidate'));
     }
 
-    public function submit(Request $request, Candidate $candidate)
+    // Menampilkan detail konfirmasi berdasarkan ID
+    public function show($id)
+    {
+        $candidate = Candidate::with('next', 'user')->findOrFail($id);
+
+        // Pastikan user hanya bisa melihat miliknya sendiri
+        if (Auth::user()->is_admin) {
+            return view('candidate.forms.show', compact('candidate'));
+        }
+
+        if ($candidate->user_id !== Auth::id()) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        return view('candidate.forms.show', compact('candidate'));
+    }
+
+    // Simpan data konfirmasi
+    public function store(Request $request, Candidate $candidate)
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -44,6 +71,7 @@ class FormConfirmationController extends Controller
         $candidate->user->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'is_confirmed' => true,
         ]);
 
         // Simpan data lanjutan ke candidate_nexts
@@ -60,10 +88,6 @@ class FormConfirmationController extends Controller
             'preferred_team_position' => $validated['preferred_team_position'] ?? null,
             'preferred_team_position_reason' => $validated['preferred_team_position_reason'] ?? null,
             'other_notes' => $validated['other_notes'] ?? null,
-        ]);
-
-        $candidate->user->update([
-            'is_confirmed' => true
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Konfirmasi pendaftaran berhasil disimpan.');
