@@ -43,4 +43,9 @@ class Candidate extends Model
     {
         return $this->hasMany(CandidateScore::class, 'candidate_id');
     }
+
+    public function next()
+    {
+        return $this->hasOne(CandidateNext::class);
+    }
 }

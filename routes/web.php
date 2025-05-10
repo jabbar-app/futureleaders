@@ -1,17 +1,22 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\CandidateController;
-use App\Http\Controllers\CandidateMotivationController;
-use App\Http\Controllers\NotificationController;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CandidateController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\FormConfirmationController;
+use App\Http\Controllers\CandidateMotivationController;
 
 Route::get('/', function () {
     return view('landing');
 })->name('home');
+
+Route::get('/announcement', function () {
+    return view('pages.announcement');
+})->name('pages.announcement');
 
 Route::get('/guidebook', function () {
     return redirect(asset('files/YFLI Handbook - Langkat Binjai 2025.pdf'));
@@ -39,6 +44,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('dashboard', [CandidateController::class, 'dashboard'])->name('candidate.dashboard');
     Route::get('candidate/detail/{candidate}', [CandidateController::class, 'detail'])->name('candidate.detail');
+
+    Route::get('/form/confirmation/{candidate}', [FormConfirmationController::class, 'show'])->name('form.confirmation');
+    Route::post('/form/confirmation/{candidate}', [FormConfirmationController::class, 'submit'])->name('form.confirmation.submit');
 
     Route::prefix('notifications')->group(function () {
         Route::get('/read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.read');

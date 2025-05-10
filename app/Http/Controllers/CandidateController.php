@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Candidate;
 use Illuminate\Http\Request;
 use App\Models\SelectionPhase;
+use App\Services\GroundsApiService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\ImageManager;
@@ -14,6 +15,17 @@ class CandidateController extends Controller
 {
     public function dashboard()
     {
+        $user = Auth::user();
+
+        $existsInGround = GroundsApiService::emailExists($user->email);
+
+        $candidate = $user->candidate;
+        $nextData = $candidate?->next;
+
+        if ($existsInGround && !$nextData) {
+            return redirect()->route('form.confirmation', $candidate);
+        }
+
         $candidate = Candidate::with(['educations', 'achievements', 'organizations', 'motivation', 'scores.selectionPhase'])
             ->where('user_id', Auth::id())
             ->first();
@@ -24,7 +36,7 @@ class CandidateController extends Controller
                 ->with('info', 'Silakan lengkapi Profil Pendaftaran kamu terlebih dahulu.');
         }
 
-        if ($candidate->status == 'Stage 2') {
+        if (empty($candidate->next) && $candidate->status == 'Stage 2') {
             return view('candidate.stage-2', compact('candidate'));
         }
 

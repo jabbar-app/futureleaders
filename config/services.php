@@ -40,4 +40,8 @@ return [
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
+
+    'ground_api' => [
+        'base_url' => env('GROUND_API_URL', 'https://grounds.inisiator.com/api'),
+    ],
 ];

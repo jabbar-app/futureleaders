@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Candidate;
 use Illuminate\Http\Request;
+use App\Jobs\SendWhatsAppJob;
 use App\Models\SelectionPhase;
 use Illuminate\Support\Facades\Log;
 use App\Mail\ReminderToRegisterMail;
@@ -146,30 +147,15 @@ class AdminController extends Controller
 
             if (!$phone || !$user) continue;
 
-            // Ganti {name} dengan nama pengguna
             $message = str_replace('{name}', $user->name, $messageTemplate);
 
-            try {
-                // Kirim ke API Fonnte
-                $response = Http::withHeaders([
-                    'Authorization' => $token
-                ])->asForm()->post('https://api.fonnte.com/send', [
-                    'target' => $phone,
-                    'message' => $message,
-                    'countryCode' => '62',
-                ]);
+            // Kirim ke queue (job)
+            dispatch(new SendWhatsAppJob($phone, $message, $token))->delay(now()->addSeconds(1));
 
-                if ($response->successful() && $response->json('status') === true) {
-                    $notifiedNumbers->push($phone);
-                } else {
-                    Log::error("Gagal mengirim WA ke $phone: " . $response->body());
-                }
-            } catch (\Exception $e) {
-                Log::error("Exception saat kirim WA ke $phone: " . $e->getMessage());
-            }
+            $notifiedNumbers->push($phone);
         }
 
-        return redirect()->back()->with('success', 'WhatsApp berhasil dikirim ke ' . $notifiedNumbers->count() . ' kandidat.');
+        return redirect()->back()->with('success', 'WhatsApp akan dikirim ke ' . $notifiedNumbers->count() . ' kandidat melalui background job.');
     }
 
     public function previewReminderCount(Request $request)
