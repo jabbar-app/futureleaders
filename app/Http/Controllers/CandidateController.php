@@ -36,9 +36,9 @@ class CandidateController extends Controller
                 ->with('info', 'Silakan lengkapi Profil Pendaftaran kamu terlebih dahulu.');
         }
 
-        if (!empty($candidate->next) && $candidate->status == 'Stage 2') {
-            return view('candidate.stage-2', compact('candidate'));
-        }
+        // if (!empty($candidate->next) && $candidate->status == 'Stage 2') {
+        //     return view('candidate.stage-2', compact('candidate'));
+        // }
 
         $incompleteFields = $this->getIncompleteFields($candidate);
 
