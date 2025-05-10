@@ -30,6 +30,8 @@ Route::get('/poster', function () {
 Route::get('/auth/google', [UserController::class, 'redirectToGoogle'])->name('auth.google.redirect');
 Route::get('/auth/google/callback', [UserController::class, 'handleGoogleCallback']);
 
+Route::get('/form/confirmation/{candidate}', [FormConfirmationController::class, 'show'])->name('form.confirmation');
+Route::post('/form/confirmation/{candidate}', [FormConfirmationController::class, 'submit'])->name('form.confirmation.submit');
 
 Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
@@ -44,9 +46,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('dashboard', [CandidateController::class, 'dashboard'])->name('candidate.dashboard');
     Route::get('candidate/detail/{candidate}', [CandidateController::class, 'detail'])->name('candidate.detail');
-
-    Route::get('/form/confirmation/{candidate}', [FormConfirmationController::class, 'show'])->name('form.confirmation');
-    Route::post('/form/confirmation/{candidate}', [FormConfirmationController::class, 'submit'])->name('form.confirmation.submit');
 
     Route::prefix('notifications')->group(function () {
         Route::get('/read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.read');
