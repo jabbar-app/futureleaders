@@ -29,8 +29,8 @@
                   <td>{{ $data->candidate->user->email }}</td>
                   <td>{{ $data->candidate->phone }}</td>
                   <td>
-                    <span class="badge bg-{{ $data->candidate->user->is_confirmed ? 'success' : 'secondary' }}">
-                      {{ $data->candidate->user->is_confirmed ? 'Sudah Konfirmasi' : 'Belum' }}
+                    <span class="badge bg-{{ $data->is_ready_commitment_fee ? 'success' : 'secondary' }}">
+                      {{ $data->is_ready_commitment_fee ? 'Bersedia' : 'Tidak' }}
                     </span>
                   </td>
                   <td>
