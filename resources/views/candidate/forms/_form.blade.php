@@ -5,7 +5,9 @@
   @endif
 
   <div class="form-section">
-    <h3 class="form-section-title">Informasi Pribadi</h3>
+    <h2 class="mb-1">Konfirmasi Lulus TPA</h2>
+    <p>Silakan lengkapi form berikut untuk melakukan konfirmasi kelulusan Ujian TPA (Tes Potensi Akademik)</p>
+    <h3 class="form-section-title mt-4 mb-2">Informasi Pribadi</h3>
     <div class="alert alert-info">
       Pastikan data kontak benar dan aktif! Seluruh informasi akan dikirimkan ke kontak berikut.
     </div>
@@ -44,12 +46,12 @@
         <h3 class="text-info"><em>Disclaimer:</em></h3>
         <p>
           Dikarenakan ada beberapa peserta yang tidak memberikan konfirmasi setelah dilakukan penilaian oleh Tim Juri,
-          maka untuk proses seleksi berikutnya, Peserta akan diwajibkan untuk membayar <em>Commitment Fee</em> sebesar Rp150.000.
+          maka untuk proses seleksi berikutnya, Seluruh Peserta akan diwajibkan untuk membayar <em>Commitment Fee</em> sebesar Rp150.000.
         </p>
         <p>
           Panitia bertekad agar Proses Seleksi LBFL 2025 tetap gratis! Namun, memberikan penilaian kepada Peserta yang
           tidak serius
-          dan bersungguh-sungguh, hanya akan membuang waktu dan tenaga Tim Rekruter dan berpotensi menutup peluang bagi
+          dan tidak bersungguh-sungguh, hanya akan membuang waktu dan tenaga Tim Rekruter dan berpotensi menutup peluang bagi
           Peserta lain yang bersungguh-sungguh.
         </p>
         <h4 class="text-info mb-1">
@@ -197,7 +199,7 @@
   <div class="form-section">
     <h3 class="form-section-title">Ekspektasi & Preferensi Program</h3>
     <div class="form-group">
-      <label for="expectation_from_program" class="form-label">Apa ekspektasi Anda dari program ini?</label>
+      <label for="expectation_from_program" class="form-label">Apa ekspektasi kamu dari program ini?</label>
       <textarea name="expectation_from_program" id="expectation_from_program"
         class="form-textarea @error('expectation_from_program') is-invalid @enderror">{{ old('expectation_from_program', $candidate->expectation_from_program ?? '') }}</textarea>
       @error('expectation_from_program')
@@ -206,7 +208,7 @@
     </div>
 
     <div class="form-group">
-      <label for="preferred_team_position" class="form-label">Posisi tim yang diminati</label>
+      <label for="preferred_team_position" class="form-label">Jika kamu bergabung dalam sebuah Organisasi/Komunitas/Tim yang baru, Posisi apa yang akan kamu pilih?</label>
       <input type="text" name="preferred_team_position" id="preferred_team_position"
         class="form-control @error('preferred_team_position') is-invalid @enderror"
         value="{{ old('preferred_team_position', $candidate->preferred_team_position ?? '') }}">
