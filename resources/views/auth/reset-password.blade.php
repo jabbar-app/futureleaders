@@ -38,7 +38,7 @@
               @csrf
 
               <!-- Reset Token -->
-              <input type="hidden" name="token" value="{{ $request->route('token') }}">
+              <input type="hidden" name="token" value="{{ request()->route('token') }}">
 
               <!-- Email -->
               <div class="mb-3">
