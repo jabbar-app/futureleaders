@@ -571,7 +571,7 @@
             </svg>
             Email Panitia
           </a>
-          <a href="https://wa.me/6281234567890?text=Halo%20Panitia%20LBFL%202025" target="_blank"
+          <a href="https://wa.me/6285361205140?text=Halo%20Panitia%20LBFL%202025" target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-base font-semibold rounded-lg text-white bg-lbfl-green hover:bg-lbfl-green-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lbfl-green transition-all duration-200 ease-in-out shadow-md hover:shadow-lg hover:-translate-y-1 transform">
             <svg class="w-5 h-5 mr-2.5 -ml-1" fill="currentColor" viewBox="0 0 24 24"
