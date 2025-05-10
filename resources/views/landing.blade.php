@@ -378,7 +378,7 @@
 
 @push('scripts')
   <script>
-    const targetDate = new Date("2025-04-25T23:59:59").getTime();
+    const targetDate = new Date("2025-05-14T23:59:59").getTime();
 
     function updateCountdown(prefix) {
       const now = new Date().getTime();
