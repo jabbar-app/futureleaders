@@ -44,8 +44,8 @@
               <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input id="email" type="email" name="email"
-                  class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $request->email) }}"
-                  required autofocus />
+                  class="form-control @error('email') is-invalid @enderror"
+                  value="{{ old('email', request()->query('email')) }}" required autofocus />
               </div>
 
               <!-- Password -->
