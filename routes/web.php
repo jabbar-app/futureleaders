@@ -42,7 +42,7 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(func
     Route::post('/preview-reminder-count', [AdminController::class, 'previewReminderCount'])->name('admin.previewReminderCount');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
 
     Route::get('dashboard', [CandidateController::class, 'dashboard'])->name('candidate.dashboard');
     Route::get('candidate/detail/{candidate}', [CandidateController::class, 'detail'])->name('candidate.detail');
