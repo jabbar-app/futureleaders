@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Candidate;
-use App\Models\CandidateNext;
 use Illuminate\Http\Request;
+use App\Models\CandidateNext;
+use App\Jobs\SendBroadcastEmail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class FormConfirmationController extends Controller
 {
@@ -16,6 +18,29 @@ class FormConfirmationController extends Controller
         $candidates = CandidateNext::all();
 
         return view('candidate.forms.index', compact('candidates'));
+    }
+
+    public function broadcast(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'subject' => 'required|string|max:255',
+            'body' => 'required|string',
+        ]);
+
+        // Ambil semua kandidat dengan relasi user
+        $candidates = CandidateNext::with('candidate.user')->get();
+
+        // Dispatch job satu per satu untuk setiap user
+        foreach ($candidates as $item) {
+            $user = $item->candidate->user;
+
+            if ($user && $user->email) {
+                SendBroadcastEmail::dispatch($user, $request->subject, $request->body);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Broadcast email sedang dikirim ke seluruh peserta di background.');
     }
 
     // Menampilkan form konfirmasi

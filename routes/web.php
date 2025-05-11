@@ -33,6 +33,7 @@ Route::get('/auth/google/callback', [UserController::class, 'handleGoogleCallbac
 Route::middleware('auth')->prefix('confirmation')->group(function () {
     Route::get('/{candidate}/create', [FormConfirmationController::class, 'create'])->name('confirmation.create');
     Route::post('/{candidate}/store', [FormConfirmationController::class, 'store'])->name('confirmation.store');
+    Route::post('/confirmation/broadcast', [FormConfirmationController::class, 'broadcast'])->name('confirmation.broadcast');
 });
 
 Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->group(function () {

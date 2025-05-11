@@ -1,5 +1,3 @@
-// resources/views/candidate/forms/index.blade.php
-
 @extends('layouts.main')
 
 @section('content')
@@ -8,6 +6,20 @@
     <div class="card">
       <div class="card-body">
         <h4 class="mb-4 text-danger">Data Konfirmasi Pendaftaran</h4>
+
+        <form action="{{ route('confirmation.broadcast') }}" method="POST" class="mb-4">
+          @csrf
+          <div class="mb-3">
+            <label for="subject" class="form-label">Subjek Email</label>
+            <input type="text" class="form-control" id="subject" name="subject" required>
+          </div>
+          <div class="mb-3">
+            <label for="body" class="form-label">Isi Email</label>
+            <textarea class="form-control" id="body" name="body" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Kirim Broadcast Email</button>
+        </form>
+
 
         <div class="table-responsive">
           <table class="table table-bordered">
@@ -34,7 +46,8 @@
                     </span>
                   </td>
                   <td>
-                    <a href="{{ route('confirmation.show', $data->candidate->id) }}" class="btn btn-sm btn-danger">Lihat Detail</a>
+                    <a href="{{ route('confirmation.show', $data->candidate->id) }}" class="btn btn-sm btn-danger">Lihat
+                      Detail</a>
                   </td>
                 </tr>
               @empty
